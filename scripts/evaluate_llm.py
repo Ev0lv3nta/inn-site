@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 async def main(args):
     cases = json.loads((ROOT / "tests/llm_cases.json").read_text())
-    output = ROOT / "reports/llm-regression.json"
+    output = args.output or ROOT / "reports/llm-regression.json"
     previous = json.loads(output.read_text()) if args.append and output.exists() else {}
     rows = previous.get("rows", [])
     if args.case:
@@ -22,7 +22,9 @@ async def main(args):
     cases = [c for c in cases if c["id"] not in {r["id"] for r in rows}]
     async with httpx.AsyncClient() as client:
         llm = (
-            OpenRouter(client, budget_file=ROOT / ".cache/llm-spend.json")
+            OpenRouter(
+                client, budget_file=ROOT / ".cache/llm-spend.json", budget_usd=args.budget_usd
+            )
             if args.llm == "openrouter"
             else Ollama(client)
         )
@@ -30,10 +32,23 @@ async def main(args):
             await llm.prepare()
         for case in cases:
             inn = case.get("inn", "7721581040")
-            candidates = [Candidate("c1", "example.ru")]
+            candidates = [
+                Candidate(**c)
+                for c in case.get("candidates", [{"id": "c1", "domain": "example.ru"}])
+            ]
             evidence = [
-                Evidence(
-                    "e1", "https://example.ru/legal", case.get("kind", "html"), case["text"], "c1"
+                Evidence(**e)
+                for e in case.get(
+                    "evidence",
+                    [
+                        {
+                            "id": "e1",
+                            "url": "https://example.ru/legal",
+                            "kind": case.get("kind", "html"),
+                            "text": case["text"],
+                            "candidate_id": "c1",
+                        }
+                    ],
                 )
             ]
             review = await llm.review(inn, candidates, evidence)
@@ -84,6 +99,8 @@ async def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Проверить LLM на сохранённых фрагментах")
     parser.add_argument("--case", nargs="*")
+    parser.add_argument("--output", type=Path)
+    parser.add_argument("--budget-usd", type=float, default=0.25)
     parser.add_argument("--append", action="store_true")
     parser.add_argument("--llm", choices=["openrouter", "ollama"], default="openrouter")
     asyncio.run(main(parser.parse_args()))

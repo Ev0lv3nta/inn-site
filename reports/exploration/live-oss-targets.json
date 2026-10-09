@@ -1,0 +1,100 @@
+{
+  "run_at": "2026-10-09T20:53:47.118127+00:00",
+  "python": "3.13.14",
+  "model_info": {
+    "id": "openai/gpt-6-luna",
+    "pricing": {
+      "prompt": "0.0000001",
+      "completion": "0.0000005",
+      "web_search": "0.01",
+      "input_cache_read": "0.00000001",
+      "input_cache_write": "0.000000125",
+      "overrides": [
+        {
+          "min_prompt_tokens": 272000,
+          "prompt": "0.0000002",
+          "completion": "0.00000075",
+          "input_cache_read": "0.00000002",
+          "input_cache_write": "0.00000025"
+        }
+      ]
+    },
+    "context_length": 1050000
+  },
+  "search_provider": "crw",
+  "source_sha256": "3e547a632b369948011cf6da1aacab925cae679d9d5e8e29bc79fa50c01a97f3",
+  "rows": [
+    {
+      "inn": "7724709637",
+      "name": "Фотоэксперт: несколько брендов",
+      "split": "dev",
+      "expected_domains": [],
+      "gold_source": "https://fotoproekt.ru/requisites",
+      "note": "Неоднозначный основной домен. Фотоэксперт подтверждён на нескольких собственных сайтах; эталон netprint.ru исправлен после аудита первого контрольного прогона.",
+      "additional_gold_sources": [
+        "https://printbook.ru/privacy",
+        "https://partner.netprint.ru/ru/145/2415/"
+      ],
+      "domain": null,
+      "status": "ambiguous",
+      "ok": true,
+      "seconds": 112.63,
+      "search_calls": 2,
+      "read_urls": 12,
+      "cache_hits": 0,
+      "llm_calls": 7,
+      "llm_cost_usd": 0.0153916,
+      "search_failures": 0
+    },
+    {
+      "inn": "7719571260",
+      "name": "ЛитРес",
+      "split": "holdout",
+      "expected_domains": [
+        "litres.ru"
+      ],
+      "gold_source": "https://www.litres.ru/company/contacts/",
+      "note": "Продавец электронных книг; реквизиты на собственном сайте.",
+      "domain": "litres.ru",
+      "status": "found",
+      "ok": true,
+      "seconds": 21.64,
+      "search_calls": 1,
+      "read_urls": 3,
+      "cache_hits": 0,
+      "llm_calls": 3,
+      "llm_cost_usd": 0.00305806,
+      "search_failures": 0
+    },
+    {
+      "inn": "7703270067",
+      "name": "АШАН",
+      "split": "holdout",
+      "expected_domains": [
+        "auchan.ru"
+      ],
+      "gold_source": "https://www.auchan.ru/b2b/publichnaya-oferta/",
+      "note": "Розничная торговля; роль продавца в оферте, банковский ИНН может встречаться рядом.",
+      "domain": "auchan.ru",
+      "status": "found",
+      "ok": true,
+      "seconds": 79.02,
+      "search_calls": 2,
+      "read_urls": 7,
+      "cache_hits": 0,
+      "llm_calls": 6,
+      "llm_cost_usd": 0.00553546,
+      "search_failures": 0
+    }
+  ],
+  "summary": {
+    "cases": 3,
+    "correct": 3,
+    "returned_domains": 2,
+    "wrong_domains": 0,
+    "precision_on_returned": 1.0,
+    "positive_recall": 1.0,
+    "median_seconds": 79.02,
+    "errors": 0
+  }
+}

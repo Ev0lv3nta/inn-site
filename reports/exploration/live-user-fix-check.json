@@ -1,0 +1,78 @@
+{
+  "run_at": "2026-10-09T19:26:53.532978+00:00",
+  "python": "3.13.14",
+  "model_info": {
+    "id": "openai/gpt-6-luna",
+    "pricing": {
+      "prompt": "0.0000001",
+      "completion": "0.0000005",
+      "web_search": "0.01",
+      "input_cache_read": "0.00000001",
+      "input_cache_write": "0.000000125",
+      "overrides": [
+        {
+          "min_prompt_tokens": 272000,
+          "prompt": "0.0000002",
+          "completion": "0.00000075",
+          "input_cache_read": "0.00000002",
+          "input_cache_write": "0.00000025"
+        }
+      ]
+    },
+    "context_length": 1050000
+  },
+  "search_provider": "searx",
+  "source_sha256": "324ac63aa0a0d5a2d31faf5c42aeb578f2601c982fb43bc5611ddfbd2619e7cb",
+  "rows": [
+    {
+      "inn": "7719571260",
+      "name": "ЛитРес",
+      "split": "holdout",
+      "expected_domains": [
+        "litres.ru"
+      ],
+      "gold_source": "https://www.litres.ru/company/contacts/",
+      "note": "Продавец электронных книг; реквизиты на собственном сайте.",
+      "domain": null,
+      "status": "ambiguous",
+      "ok": false,
+      "seconds": 57.57,
+      "search_calls": 2,
+      "read_urls": 9,
+      "cache_hits": 0,
+      "llm_calls": 2,
+      "llm_cost_usd": 0.0042601,
+      "search_failures": 0
+    },
+    {
+      "inn": "7703270067",
+      "name": "АШАН",
+      "split": "holdout",
+      "expected_domains": [
+        "auchan.ru"
+      ],
+      "gold_source": "https://www.auchan.ru/b2b/publichnaya-oferta/",
+      "note": "Розничная торговля; роль продавца в оферте, банковский ИНН может встречаться рядом.",
+      "domain": "auchan.ru",
+      "status": "found",
+      "ok": true,
+      "seconds": 65.95,
+      "search_calls": 3,
+      "read_urls": 10,
+      "cache_hits": 0,
+      "llm_calls": 3,
+      "llm_cost_usd": 0.00344115,
+      "search_failures": 0
+    }
+  ],
+  "summary": {
+    "cases": 2,
+    "correct": 1,
+    "returned_domains": 1,
+    "wrong_domains": 0,
+    "precision_on_returned": 1.0,
+    "positive_recall": 0.5,
+    "median_seconds": 61.760000000000005,
+    "errors": 0
+  }
+}

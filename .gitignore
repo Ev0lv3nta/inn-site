@@ -10,3 +10,4 @@ dist/
 build/
 reports/private/
 docs/solution.pdf
+node_modules/

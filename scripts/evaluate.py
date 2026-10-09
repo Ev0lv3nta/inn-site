@@ -53,6 +53,7 @@ async def run(args):
         crw_url=args.crw_url,
         cache_dir=None if args.no_cache else ROOT / ".cache/inn-site",
         budget_file=ROOT / ".cache/llm-spend.json",
+        budget_usd=args.budget_usd,
     )
     async with httpx.AsyncClient() as client:
         if args.llm == "ollama":
@@ -75,7 +76,31 @@ async def run(args):
         ).hexdigest(),
         "rows": rows,
     }
-    for case in cases:
+    if args.resume and output.exists():
+        previous = json.loads(output.read_text())
+        if (
+            previous["source_sha256"] != report["source_sha256"]
+            or previous["model_info"] != model_info
+            or previous["search_provider"] != args.search
+        ):
+            raise ValueError("Версия кода, модель или поиск изменились; продолжение запрещено")
+        report, rows = previous, previous["rows"]
+        report["resumed_at"] = datetime.now(UTC).isoformat()
+        if args.retry_errors:
+            rows = [r for r in rows if r["status"] not in {"search_error", "llm_error", "timeout"}]
+            report["rows"] = rows
+            report["retried_errors_at"] = datetime.now(UTC).isoformat()
+    report["workers"] = args.workers
+    order = {case["inn"]: i for i, case in enumerate(cases)}
+    if not {row["inn"] for row in rows}.issubset(order):
+        raise ValueError("В отчёте есть входы, которых нет в текущей выборке")
+    semaphore = asyncio.Semaphore(args.workers)
+
+    async def evaluate_case(case):
+        async with semaphore:
+            await process_case(case)
+
+    async def process_case(case):
         result = await find_site(case["inn"], settings)
         ok = (
             result.domain in case["expected_domains"]
@@ -91,7 +116,13 @@ async def run(args):
                 "ok": ok,
                 "seconds": result.trace.get("elapsed_seconds", 0),
                 "search_calls": sum(
-                    o["tool"] in {"web_search_exa", "crw_search", "ddgs_search", "searx_search"}
+                    o["tool"]
+                    in {
+                        "web_search_exa",
+                        "crw_search",
+                        "ddgs_search",
+                        "searx_search",
+                    }
                     for o in result.trace.get("search_operations", [])
                 ),
                 "read_urls": len(result.trace.get("page_operations", [])),
@@ -107,24 +138,39 @@ async def run(args):
                 "search_failures": len(result.trace.get("search_failures", [])),
             }
         )
+        completed = rows[-1]
+        rows.sort(key=lambda row: order[row["inn"]])
         (trace_dir / f"{case['inn']}.json").write_text(
             json.dumps(result.trace, ensure_ascii=False, indent=2)
         )
         report["summary"] = summarize(rows)
-        output.write_text(json.dumps(report, ensure_ascii=False, indent=2))
-        print(json.dumps(rows[-1], ensure_ascii=False), flush=True)
+        temporary = output.with_suffix(".tmp")
+        temporary.write_text(json.dumps(report, ensure_ascii=False, indent=2))
+        temporary.replace(output)
+        print(json.dumps(completed, ensure_ascii=False), flush=True)
+
+    completed_ids = {row["inn"] for row in rows}
+    await asyncio.gather(
+        *(evaluate_case(case) for case in cases if case["inn"] not in completed_ids)
+    )
     print(json.dumps(report["summary"], ensure_ascii=False), flush=True)
+    if not all(row["ok"] for row in rows):
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--split", choices=["dev", "holdout", "all"], default="dev")
-    parser.add_argument("--search", choices=["searx", "ddgs", "exa", "crw"], default="searx")
+    parser.add_argument("--search", choices=["searx", "ddgs", "exa", "crw"], default="crw")
     parser.add_argument("--searx-url", default=os.getenv("SEARX_URL", "http://127.0.0.1:8888"))
-    parser.add_argument("--crw-url")
+    parser.add_argument("--crw-url", default=os.getenv("CRW_URL", "http://127.0.0.1:3080"))
     parser.add_argument("--llm", choices=["openrouter", "ollama"], default="openrouter")
     parser.add_argument("--model")
     parser.add_argument("--inn", nargs="*")
     parser.add_argument("--output", type=Path)
     parser.add_argument("--no-cache", action="store_true")
+    parser.add_argument("--budget-usd", type=float, default=0.25)
+    parser.add_argument("--workers", type=int, choices=[1, 2], default=1)
+    parser.add_argument("--resume", action="store_true")
+    parser.add_argument("--retry-errors", action="store_true")
     asyncio.run(run(parser.parse_args()))

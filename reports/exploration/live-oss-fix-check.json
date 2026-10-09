@@ -1,0 +1,141 @@
+{
+  "run_at": "2026-10-09T21:13:42.052779+00:00",
+  "python": "3.13.14",
+  "model_info": {
+    "id": "openai/gpt-6-luna",
+    "pricing": {
+      "prompt": "0.0000001",
+      "completion": "0.0000005",
+      "web_search": "0.01",
+      "input_cache_read": "0.00000001",
+      "input_cache_write": "0.000000125",
+      "overrides": [
+        {
+          "min_prompt_tokens": 272000,
+          "prompt": "0.0000002",
+          "completion": "0.00000075",
+          "input_cache_read": "0.00000002",
+          "input_cache_write": "0.00000025"
+        }
+      ]
+    },
+    "context_length": 1050000
+  },
+  "search_provider": "crw",
+  "source_sha256": "21eef5f34acd9cbb414825ca1b7776aed5733f5cd605785821d2274553e21afd",
+  "rows": [
+    {
+      "inn": "9701034075",
+      "name": "Пироговая / Русские пироги",
+      "split": "dev",
+      "expected_domains": [
+        "xn--80aebcypygk.xn--p1ai",
+        "glavpirog.ru"
+      ],
+      "gold_source": "https://xn--80aebcypygk.xn--p1ai/contacty/",
+      "note": "Кириллический домен; допустим подтверждённый основной домен или его алиас.",
+      "domain": null,
+      "status": "search_error",
+      "ok": false,
+      "seconds": 56.39,
+      "search_calls": 2,
+      "read_urls": 9,
+      "cache_hits": 0,
+      "llm_calls": 7,
+      "llm_cost_usd": 0.00961221,
+      "search_failures": 1
+    },
+    {
+      "inn": "7810353960",
+      "name": "ТаймВэб",
+      "split": "dev",
+      "expected_domains": [
+        "timeweb.com"
+      ],
+      "gold_source": "https://timeweb.com/ru/contacts/",
+      "note": "Домен сайта отличается от домена корпоративной почты.",
+      "domain": "timeweb.com",
+      "status": "found",
+      "ok": true,
+      "seconds": 21.65,
+      "search_calls": 1,
+      "read_urls": 3,
+      "cache_hits": 0,
+      "llm_calls": 3,
+      "llm_cost_usd": 0.00331856,
+      "search_failures": 0
+    },
+    {
+      "inn": "4401116480",
+      "name": "Совкомбанк",
+      "split": "dev",
+      "expected_domains": [
+        "sovcombank.ru"
+      ],
+      "gold_source": "https://sovcombank.ru/about/pages/requisites",
+      "note": "ИНН часто упоминается в платёжных реквизитах чужих сайтов.",
+      "domain": "sovcombank.ru",
+      "status": "found",
+      "ok": true,
+      "seconds": 98.55,
+      "search_calls": 3,
+      "read_urls": 6,
+      "cache_hits": 0,
+      "llm_calls": 6,
+      "llm_cost_usd": 0.00759584,
+      "search_failures": 0
+    },
+    {
+      "inn": "7710140679",
+      "name": "ТБанк",
+      "split": "dev",
+      "expected_domains": [
+        "tbank.ru"
+      ],
+      "gold_source": "https://secrets.tbank.ru/cookie-policy/",
+      "note": "У банка есть собственный каталог контрагентов; карточка не доказывает владельца сайта.",
+      "domain": "tbank.ru",
+      "status": "found",
+      "ok": true,
+      "seconds": 39.95,
+      "search_calls": 2,
+      "read_urls": 5,
+      "cache_hits": 0,
+      "llm_calls": 5,
+      "llm_cost_usd": 0.00722429,
+      "search_failures": 0
+    },
+    {
+      "inn": "7724709637",
+      "name": "Фотоэксперт: несколько брендов",
+      "split": "dev",
+      "expected_domains": [],
+      "gold_source": "https://fotoproekt.ru/requisites",
+      "note": "Неоднозначный основной домен. Фотоэксперт подтверждён на нескольких собственных сайтах; эталон netprint.ru исправлен после аудита первого контрольного прогона.",
+      "additional_gold_sources": [
+        "https://printbook.ru/privacy",
+        "https://partner.netprint.ru/ru/145/2415/"
+      ],
+      "domain": null,
+      "status": "search_error",
+      "ok": false,
+      "seconds": 81.49,
+      "search_calls": 4,
+      "read_urls": 6,
+      "cache_hits": 0,
+      "llm_calls": 7,
+      "llm_cost_usd": 0.01009106,
+      "search_failures": 3
+    }
+  ],
+  "summary": {
+    "cases": 5,
+    "correct": 3,
+    "returned_domains": 3,
+    "wrong_domains": 0,
+    "precision_on_returned": 1.0,
+    "positive_recall": 0.75,
+    "median_seconds": 56.39,
+    "errors": 2
+  }
+}

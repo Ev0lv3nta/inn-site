@@ -1,0 +1,60 @@
+{
+  "run_at": "2026-10-09T21:51:31.044228+00:00",
+  "python": "3.13.14",
+  "model_info": {
+    "id": "openai/gpt-6-luna",
+    "pricing": {
+      "prompt": "0.0000001",
+      "completion": "0.0000005",
+      "web_search": "0.01",
+      "input_cache_read": "0.00000001",
+      "input_cache_write": "0.000000125",
+      "overrides": [
+        {
+          "min_prompt_tokens": 272000,
+          "prompt": "0.0000002",
+          "completion": "0.00000075",
+          "input_cache_read": "0.00000002",
+          "input_cache_write": "0.00000025"
+        }
+      ]
+    },
+    "context_length": 1050000
+  },
+  "search_provider": "crw",
+  "source_sha256": "9d47c8f40f9280ca42ead03c66a8b54e68ddd78c2e175fbc92d40c704abe5611",
+  "rows": [
+    {
+      "inn": "9701034075",
+      "name": "Пироговая / Русские пироги",
+      "split": "dev",
+      "expected_domains": [
+        "xn--80aebcypygk.xn--p1ai",
+        "glavpirog.ru"
+      ],
+      "gold_source": "https://xn--80aebcypygk.xn--p1ai/contacty/",
+      "note": "Кириллический домен; допустим подтверждённый основной домен или его алиас.",
+      "domain": null,
+      "status": "insufficient_evidence",
+      "ok": false,
+      "seconds": 114.43,
+      "search_calls": 4,
+      "read_urls": 7,
+      "cache_hits": 0,
+      "llm_calls": 8,
+      "llm_cost_usd": 0.01301088,
+      "search_failures": 0
+    }
+  ],
+  "workers": 1,
+  "summary": {
+    "cases": 1,
+    "correct": 0,
+    "returned_domains": 0,
+    "wrong_domains": 0,
+    "precision_on_returned": null,
+    "positive_recall": 0.0,
+    "median_seconds": 114.43,
+    "errors": 0
+  }
+}

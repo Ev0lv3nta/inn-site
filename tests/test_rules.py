@@ -2,7 +2,7 @@ import socket
 
 import pytest
 
-from inn_site.models import Candidate, Evidence, Review, Verdict
+from inn_site.models import Candidate, ComparisonSource, Evidence, Review, Verdict
 from inn_site.rules import (
     choose_domain,
     has_inn,
@@ -53,6 +53,17 @@ def test_confirmed_owner():
         [Evidence("e1", "https://dadata.ru/offer/", "html", TEXT, "c1")],
     )
     assert result == ("dadata.ru", "found")
+
+
+def test_uncertain_primary_basis_cannot_return_a_domain():
+    r = review()
+    r.primary_basis = "uncertain"
+    assert choose_domain(
+        INN,
+        r,
+        [Candidate("c1", "dadata.ru")],
+        [Evidence("e1", "https://dadata.ru/offer/", "html", TEXT, "c1")],
+    ) == (None, "ambiguous")
 
 
 @pytest.mark.parametrize(
@@ -149,6 +160,39 @@ def test_range_of_services_does_not_prove_primary_brand():
             Evidence("e2", "https://two.ru/", "html", TEXT, "c2"),
         ],
     ) == (None, "ambiguous")
+
+
+@pytest.mark.parametrize("broken", [False, True])
+def test_hierarchy_requires_literal_sources_from_both_owned_sites(broken):
+    main = TEXT + " Это головной сайт компании; отдельный продукт размещён на two.ru."
+    product = TEXT + " Это отдельный продукт. Головной сайт компании: one.ru."
+    r = review(quote=main)
+    r.primary_basis = "hierarchy"
+    r.verdicts.append(
+        Verdict(
+            candidate_id="c2",
+            relation="owner",
+            main_site=False,
+            evidence_id="e2",
+            quote=product,
+            reason="Отдельный продукт",
+        )
+    )
+    r.comparison_sources = [
+        ComparisonSource(evidence_id="e1", quote=main),
+        ComparisonSource(
+            evidence_id="e2", quote="Выдуманная иерархия брендов" if broken else product
+        ),
+    ]
+    assert choose_domain(
+        INN,
+        r,
+        [Candidate("c1", "one.ru"), Candidate("c2", "two.ru")],
+        [
+            Evidence("e1", "https://one.ru/company", "html", main, "c1"),
+            Evidence("e2", "https://two.ru/legal", "html", product, "c2"),
+        ],
+    ) == ((None, "invalid_model_evidence") if broken else ("one.ru", "found"))
 
 
 def test_longer_number_does_not_match():

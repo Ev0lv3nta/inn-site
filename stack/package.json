@@ -1,0 +1,7 @@
+{
+  "name": "inn-site-browser",
+  "private": true,
+  "dependencies": {
+    "playwright": "1.64.0"
+  }
+}

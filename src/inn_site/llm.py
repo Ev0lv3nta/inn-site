@@ -17,7 +17,12 @@ SYSTEM_PROMPT = """Ты проверяешь основной сайт росс�
 Для каждого кандидата определи relation:
 owner — организация с искомым ИНН сама ведёт этот сайт, оказывает через него услуги,
 продаёт товары или представляет себя. Документы с реквизитами оператора, продавца,
-правообладателя или самой организации являются сильным подтверждением.
+правообладателя самого сервиса или самой организации являются сильным подтверждением.
+Правообладатель книги, фильма или другого товара не обязательно управляет площадкой.
+Если оператор сайта — другое юрлицо, упоминание российского партнёра или продавца
+не устанавливает его основной сайт. Копия документа на зеркале или файловом хостинге
+также не доказывает принадлежность домена хостинга. Если документ называет другой
+сайт самой организации, найди и проверь этот сайт.
 third_party — ИНН относится к клиенту, партнёру, получателю платежа в чужом списке,
 предмету новости, вакансии, закупки, каталога или судебного документа.
 unclear — установить роль не удалось, есть конфликт или неоднозначность.
@@ -25,19 +30,37 @@ unclear — установить роль не удалось, есть конф
 Точное совпадение ИНН без понимания роли недостаточно. Реквизиты постороннего
 платёжного агента или отдельной компании группы не доказывают основной сайт.
 main_site=true только для собственного основного сайта компании или её главного
-бренда. Если несколько равноправных сайтов и основной не определяется, поставь false.
+бренда, включая его действующий доменный алиас. Два действующих сайта одного бренда
+с одинаковыми контактами могут быть алиасами: верни подтверждённый домен этого бренда.
+Если новый сайт того же бренда не публикует ИНН, доступный подтверждённый алиас
+подходит для ответа. Не исключай его ради нового неподтверждённого домена.
+Нельзя переносить подтверждение владения на новый домен только по совпадению названия.
+Если несколько равноправных брендов и основной не определяется, поставь false.
 Если есть корпоративный сайт и узкий продукт, акция или благотворительный проект,
 основным является корпоративный сайт. Узкие проекты не отмечай как main_site.
+Если собственных доменов несколько, различай иерархию и равноправные бренды.
+primary_basis=hierarchy допустим, когда тексты показывают компанию или головной
+бренд и его отдельный продукт/проект. В comparison_sources приведи дословные цитаты
+прочитанных страниц каждого собственного домена, которые обосновывают сравнение.
+Популярность, широта каталога или услуг сами по себе не устанавливают основной бренд.
+Если отношение сайтов не установлено, primary_basis=uncertain, main_site=false для
+неразличимых брендов. Для единственного собственного сайта primary_basis=single.
 Официальный реестр, включая Банк России, не принадлежит зарегистрированной в нём
 компании. Авторитетность сведений не означает владение сайтом.
 Поисковый сниппет помогает найти кандидата, но не подтверждает окончательный ответ.
 Источники без candidate_id служат только для поиска и идентификации компании.
 Не используй их как свидетельство принадлежности сайта кандидату.
-Для owner укажи evidence_id прочитанной страницы и скопируй её поле inn_quote
-в quote. Код заранее выделил эти дословные фрагменты с ИНН. Выбирай свидетельство
-по смыслу полного текста, а не только по наличию цитаты. Для остальных ролей quote="".
-Цитируй 1-2 предложения, не переписывай длинную таблицу. Не добавляй пробелы,
-слова или знаки, которых нет в исходном тексте. Один verdict на одного кандидата.
+12-значный ИНН может принадлежать физлицу, которое является руководителем или
+учредителем юрлица. Это не ИНН самого юрлица и не доказательство сайта ИП.
+Не подменяй искомый субъект организацией, в которой он работает или имеет долю.
+subject_kind — organization, entrepreneur, private_person или unknown.
+private_person допустим только если источники связывают точный ИНН с физлицом,
+а успешный ответ ФНС не содержит записи ИП. В subject_evidence_ids укажи источники
+идентификации. Отсутствие записи ФНС само по себе не определяет тип субъекта.
+Для owner укажи evidence_id прочитанной страницы с непустым inn_quote.
+Код сам прикрепит дословный фрагмент этой страницы; цитату составлять не нужно.
+Выбирай свидетельство по смыслу полного текста, а не только по наличию ИНН.
+Один verdict на одного кандидата.
 При отсутствии такого свидетельства укажи evidence_id=null и relation=unclear.
 company_name извлекай из источника с искомым ИНН, дословно без юридической формы,
 если она отделена кавычками. Если название не найдено — null.
@@ -48,7 +71,44 @@ action=search, если дополнительный запрос по найд�
 investigate_candidate_id — id наиболее вероятного собственного сайта, для которого
 нужно найти реквизиты. Можно выбрать unclear по описанию сайта, но нельзя выбирать
 явный каталог или партнёра. Если такого кандидата нет, укажи null.
-иначе finish. Отказ допустим. Верни JSON строго по заданной схеме.
+Свидетельство kind=registry содержит ответ ФНС: i — ИНН субъекта, k — ul (юрлицо)
+или fl (ИП), n/c — название, rn — регион. Это идентификация, не доказательство сайта.
+Если название установлено, начинай с названия и города: одно число в поиске может
+быть проигнорировано. Не добавляй ИНН во все запросы: для обнаружения сайта подходит
+название, для проверки домена — site:домен "ИНН". Пустые records не являются
+доказательством отсутствия сайта; не подменяй человека связанным юрлицом.
+Ты управляешь следующей операцией:
+action=search: next_query — конкретный новый поисковый запрос по полученным сведениям;
+ИНН заключай в кавычки. При шумной выдаче убери лишние слова. Узкий продукт не должен
+занимать весь поиск, когда ещё не найден основной сайт известной компании.
+Когда вероятный собственный домен уже найден, ищи внутри него через site:домен
+и точный ИНН. После 401/403 или повторных ошибок HTML предпочитай найденный текстовый
+PDF либо новый запрос site:домен "ИНН" filetype:pdf. Повторение широкого запроса
+по названию в этой ситуации обычно тратит бюджет на каталоги и публикации.
+action=read: read_urls — до трёх URL из unread_urls или links переданных источников.
+Выбирай страницы с реквизитами, контактами, офертой, документами PDF или описанием
+связи брендов. Ссылки содержат подписи; их смысл определяешь ты. Не выдумывай URL.
+action=finish только при подтверждённом ответе, установленной неоднозначности или
+исчерпании разумных путей. Одна шумная выдача ещё не является основанием закончить.
+Для search оставь read_urls пустым; для read и finish next_query=null.
+dismiss_candidate_ids — кандидаты, которые явно не подходят и больше не нужны.
+Освобождай места от каталогов и нерелевантных сайтов. Не повторяй уже использованные
+запросы и не выбирай уже прочитанные или недоступные URL: состояние инструментов
+передано в tool_state. Учитывай оставшийся бюджет операций.
+confirmed_ownership содержит ранее подтверждённые пары кандидат–источник.
+Учитывай их при сравнении и не теряй уже найденный собственный сайт.
+Если validation_error сообщает, что твой ответ не прошёл проверку, исправь выбор
+свидетельства или продолжи поиск. Не повторяй неподтверждённый окончательный ответ.
+При primary_check перепроверь гипотезу основного домена. Ищи явное указание связи
+сайтов: корпоративный сайт и его продукт, либо алиасы одного бренда. Сравнение
+«широкий спектр услуг против узкого каталога» без такой связи не доказывает иерархию.
+Если цитаты показывают лишь разные услуги, primary_basis=uncertain и main_site=false.
+Если найден только один собственный сайт, проверь, представляет ли он саму компанию
+или её главный бренд, либо отдельный продукт/проект. Сам факт, что другие сайты
+не найдены, не делает продукт основным сайтом. При недостатке сведений откажись.
+Если предполагаемый бренд не подтвердился, вернись к полному юридическому названию,
+региону и словам «официальный сайт», без ИНН и без неподтверждённого бренда.
+Отказ допустим. Верни JSON строго по заданной схеме.
 """
 
 
@@ -56,16 +116,49 @@ class LLMError(RuntimeError):
     pass
 
 
-def review_input(inn, candidates, evidence):
+def review_input(inn, candidates, evidence, state=None):
     quotes = {e.id: inn_quote(e.text, inn) if e.kind != "search" else "" for e in evidence}
     schema = Review.model_json_schema()
-    for field in ("investigate_candidate_id", "company_city"):
-        schema["properties"][field].pop("default", None)
-        schema["required"].append(field)
-    schema["$defs"]["Verdict"]["properties"]["quote"]["enum"] = sorted({"", *quotes.values()})
+    for properties in schema["properties"].values():
+        properties.pop("default", None)
+    schema["required"] = list(schema["properties"])
+    verdict_schema = schema["$defs"]["Verdict"]
+    verdict_schema["properties"].pop("quote")
+    verdict_schema["required"].remove("quote")
+    observed_urls = {
+        u for c in candidates for u in c.urls if u not in c.read_urls and u not in c.failed_urls
+    }
+    observed_urls.update(link["url"] for e in evidence for link in e.links)
+    observed_urls.update(e.url for e in evidence if e.kind == "search")
+    observed_urls.difference_update((state or {}).get("visited_urls", []))
+    if observed_urls:
+        schema["properties"]["read_urls"]["items"]["enum"] = sorted(observed_urls)
+    else:
+        schema["properties"]["read_urls"]["maxItems"] = 0
+    seen_links = set()
+
+    def unique_links(source):
+        result = []
+        for link in source.links:
+            if link["url"] not in seen_links:
+                seen_links.add(link["url"])
+                result.append(link)
+        return result
+
     payload = {
         "inn": inn,
-        "candidates": [{"id": c.id, "domain": c.domain} for c in candidates],
+        "tool_state": state or {},
+        "candidates": [
+            {
+                "id": c.id,
+                "domain": c.domain,
+                "unread_urls": [
+                    u for u in c.urls if u not in c.read_urls and u not in c.failed_urls
+                ][:24],
+                "failed_urls": c.failed_urls[-6:],
+            }
+            for c in candidates
+        ],
         "evidence": [
             {
                 "id": e.id,
@@ -74,6 +167,7 @@ def review_input(inn, candidates, evidence):
                 "candidate_id": e.candidate_id,
                 "text": e.text,
                 "inn_quote": quotes[e.id],
+                "links": unique_links(e),
             }
             for e in evidence
         ],
@@ -83,6 +177,18 @@ def review_input(inn, candidates, evidence):
         {"role": "user", "content": json.dumps(payload, ensure_ascii=False)},
     ]
     return schema, messages
+
+
+def grounded_review(content: str, inn: str, evidence: list[Evidence]) -> Review:
+    """Модель выбирает роль и источник, программа прикрепляет текст доказательства."""
+    obj = json.loads(content)
+    by_id = {e.id: e for e in evidence if e.kind not in {"search", "registry"}}
+    for verdict in obj.get("verdicts", []):
+        source = by_id.get(verdict.get("evidence_id"))
+        verdict["quote"] = (
+            inn_quote(source.text, inn) if source and verdict.get("relation") == "owner" else ""
+        )
+    return Review.model_validate(obj)
 
 
 class Ollama:
@@ -96,9 +202,9 @@ class Ollama:
         self.operations: list[dict] = []
 
     async def review(
-        self, inn: str, candidates: list[Candidate], evidence: list[Evidence]
+        self, inn: str, candidates: list[Candidate], evidence: list[Evidence], state=None
     ) -> Review:
-        schema, messages = review_input(inn, candidates, evidence)
+        schema, messages = review_input(inn, candidates, evidence, state)
         try:
             r = await self.client.post(
                 self.base_url + "/api/chat",
@@ -128,7 +234,7 @@ class Ollama:
                     "duration_seconds": round(obj.get("total_duration", 0) / 1e9, 2),
                 }
             )
-            return Review.model_validate_json(obj["message"]["content"])
+            return grounded_review(obj["message"]["content"], inn, evidence)
         except (httpx.HTTPError, ValidationError, KeyError, ValueError) as e:
             raise LLMError(f"Не удалось получить решение локальной LLM: {type(e).__name__}") from e
 
@@ -180,15 +286,16 @@ class OpenRouter:
             raise LLMError(f"Не удалось проверить тариф модели: {type(e).__name__}") from e
 
     async def review(
-        self, inn: str, candidates: list[Candidate], evidence: list[Evidence]
+        self, inn: str, candidates: list[Candidate], evidence: list[Evidence], state=None
     ) -> Review:
         if not self.metadata:
             await self.prepare()
-        schema, messages = review_input(inn, candidates, evidence)
-        input_bound = len(json.dumps(messages, ensure_ascii=False).encode()) + 1024
-        # Провайдер отклонил динамический enum цитат с кавычками.
-        # Цитата остаётся данными; её точность проверяет choose_domain.
-        schema["$defs"]["Verdict"]["properties"]["quote"].pop("enum", None)
+        schema, messages = review_input(inn, candidates, evidence, state)
+        input_bound = (
+            len(json.dumps(messages, ensure_ascii=False).encode())
+            + len(json.dumps(schema, ensure_ascii=False).encode())
+            + 1024
+        )
         if input_bound > 180000:
             raise LLMError("Контекст превышает лимит запроса")
         reserved = Decimal(input_bound) * Decimal(self.metadata["pricing"]["prompt"]) + Decimal(
@@ -230,7 +337,7 @@ class OpenRouter:
             )
             if cost is not None:
                 self.budget.settle(reserved, Decimal(str(cost)))
-            return Review.model_validate_json(obj["choices"][0]["message"]["content"])
+            return grounded_review(obj["choices"][0]["message"]["content"], inn, evidence)
         except BudgetError as e:
             raise LLMError(str(e)) from e
         except httpx.HTTPStatusError as e:

@@ -3,7 +3,6 @@
     "inn": "7721581040",
     "domain": "dadata.ru",
     "status": "found",
-    "stage": "live-final",
     "gold_source": "https://dadata.ru/offer/",
     "accepted_evidence": [
       {
@@ -11,7 +10,7 @@
         "kind": "html",
         "quote_excerpt": "Кью» Общество с ограниченной ответственностью «Дейта Кью» ОГРН 5077746329876 ИНН 7721581040 КПП 770401001 Телефон +7 495 220-19-62 Email info@dadata.ru Адрес 119034, г.",
         "quote_sha256": "c8f68d030a5a85a1e64d15bccab52db2560bc9bff8b3adab388a1eacd1990501",
-        "reason": "Сайт DaData предлагает собственные сервисы, а его раздел с реквизитами указывает ООО «Дейта Кью» с искомым ИНН."
+        "reason": "Страница оферты на dadata.ru содержит реквизиты ООО «Дейта Кью» с ИНН 7721581040 и описывает сервис DaData."
       }
     ]
   },
@@ -19,15 +18,14 @@
     "inn": "9715225506",
     "domain": "evotor.ru",
     "status": "found",
-    "stage": "live-final",
     "gold_source": "https://evotor.ru/about-us/",
     "accepted_evidence": [
       {
-        "url": "https://evotor.ru/legal/pers-data/politika-obrabotki-i-zashhity-personalnyh-dannyh-ooo-evotor-6/",
+        "url": "https://evotor.ru/about-us/",
         "kind": "html",
-        "quote_excerpt": "персональных данных. Компания (Оператор ПД): ООО «ЭВОТОР», ОГРН 5157746008107, ИНН 9715225506, почтовый адрес: 119021, Россия, г. Москва, ул. Тимура Фрунзе, д. 24,",
-        "quote_sha256": "270ffdaa6f80bc034357e973f98d2480d5a8782254e3dbe9b9276775262da671",
-        "reason": "Политика на сайте называет ООО «ЭВОТОР» оператором персональных данных; сайт представляет производителя и его товары."
+        "quote_excerpt": "Репина, д. 2/27 этаж 2 помещение 12 ОГРН 5157746008107 ИНН 9715225506 КПП 504701001 Р/с 40702810838000078748 В ПАО «Сбербанк» г. Москва БИК 044525225",
+        "quote_sha256": "d97654950837a0d245691ea6024d08db4203552fb22803a377d0fb1be61ad1c1",
+        "reason": "На странице «О компании» сайта указаны реквизиты ООО «ЭВОТОР», включая искомый ИНН; сайт представляет компанию и её продукцию."
       }
     ]
   },
@@ -35,7 +33,6 @@
     "inn": "6663003127",
     "domain": "kontur.ru",
     "status": "found",
-    "stage": "live-final",
     "gold_source": "https://kontur.ru/class/oferta",
     "accepted_evidence": [
       {
@@ -43,7 +40,7 @@
         "kind": "html",
         "quote_excerpt": "Реквизиты компании Справка о компании АО «ПФ «СКБ Контур» ИНН 6663003127 КПП 667101001 — по месту нахождения организации КПП 997750001 — в",
         "quote_sha256": "56cedc0b7af119f941bab8ccf77d0fdb501e06b6ac6f252cef0b432ff37e888f",
-        "reason": "Страница kontur.ru содержит реквизиты самой организации с искомым ИНН; это основной сайт СКБ Контур."
+        "reason": "На странице реквизитов сайта указаны ИНН 6663003127, название и юридический адрес организации."
       }
     ]
   },
@@ -51,15 +48,14 @@
     "inn": "9724061893",
     "domain": "veter.cc",
     "status": "found",
-    "stage": "live-final",
     "gold_source": "https://veter.cc/terms-and-conditions/",
     "accepted_evidence": [
       {
         "url": "https://veter.cc/terms-and-conditions/",
         "kind": "html",
         "quote_excerpt": "— общество с ограниченной ответственностью «Ветер спорт», ОГРН: 1217700533192, ИНН: 9724061893, КПП: 773101001, 121351, Москва, ул. Коцюбинского д. 4 стр. 3, помещение",
-        "quote_sha256": "8f792df67a937a15be26f3c9379ef7da7466013d51869c58c3a51857dd391463",
-        "reason": "Публичная оферта называет ООО «Ветер спорт» продавцом товаров, реализуемых через veter.cc, и прямо указывает адрес сайта."
+        "quote_sha256": "b50c671ac71462323f0a6be2f514efbda1269a200f59080cbf907fd8c1d8bbc7",
+        "reason": "Оферта на сайте прямо называет ООО «Ветер спорт» продавцом товаров через veter.cc и указывает искомый ИНН."
       }
     ]
   },
@@ -67,7 +63,6 @@
     "inn": "9701034075",
     "domain": "xn--80aebcypygk.xn--p1ai",
     "status": "found",
-    "stage": "live-final",
     "gold_source": "https://xn--80aebcypygk.xn--p1ai/contacty/",
     "accepted_evidence": [
       {
@@ -75,7 +70,7 @@
         "kind": "html",
         "quote_excerpt": "0 ₽ Корзина пуста. Корзина Корзина пуста. ООО «Пироговая», ИНН 9701034075, ОГРН 1167746235315, 105005, г. Москва, пер. Старокирочный, д.16/2, стр. 1 +7(495)2560256",
         "quote_sha256": "575659d682cce804199791a5644068dca0e9150ca99c868b5982024e601b48f3",
-        "reason": "Контактная страница сайта кафе и онлайн-магазина указывает реквизиты организации с искомым ИНН."
+        "reason": "Страница контактов указывает ООО «Пироговая», ИНН 9701034075, реквизиты, адрес и контакты. Сайт представляет кафе-пекарню «ГЛАВПИРОГ» и принимает заказы."
       }
     ]
   },
@@ -83,7 +78,6 @@
     "inn": "123",
     "domain": null,
     "status": "invalid_inn",
-    "stage": "live-final",
     "gold_source": null,
     "accepted_evidence": []
   },
@@ -91,7 +85,6 @@
     "inn": "7801451618",
     "domain": "beget.com",
     "status": "found",
-    "stage": "live-final",
     "gold_source": "https://beget.com/ru/details",
     "accepted_evidence": [
       {
@@ -99,7 +92,7 @@
         "kind": "html",
         "quote_excerpt": "адрес: 195027, РФ, г. Санкт-Петербург, а/я 209 ОГРН: 1077847645590 ИНН: 7801451618 КПП: 780601001 ОКВЭД : 62.01 Разработка компьютерного программного обеспечения Банковские реквизиты:",
         "quote_sha256": "a5b9b293dc813a101debca05a447e48833c712b8f5284dcf1c71a79fedb1f2f4",
-        "reason": "Сайт публикует реквизиты ООО «Бегет» и представляет его собственные услуги."
+        "reason": "Страница реквизитов на beget.com указывает ООО «Бегет» и точный ИНН 7801451618. Сайт представляет услуги и бренд компании."
       }
     ]
   },
@@ -107,7 +100,6 @@
     "inn": "7810962785",
     "domain": "selectel.ru",
     "status": "found",
-    "stage": "live-final",
     "gold_source": "https://selectel.ru/about/details/",
     "accepted_evidence": [
       {
@@ -115,7 +107,7 @@
         "kind": "html",
         "quote_excerpt": "лицензии Реквизиты Акционерное общество «Селектел» (сокращенное наименование: АО «Селектел») ИНН: 7810962785 КПП: 781001001 ОГРН: 1247800067790 Р/с: 40702810500000051741 в БАНК ГПБ (АО) г",
         "quote_sha256": "c4e1bb619ad2b88d3af8e614dd7b451492f2ad257500f4bf403b0b71dc77932c",
-        "reason": "Официальная страница Selectel содержит реквизиты организации с искомым ИНН и её юридический адрес."
+        "reason": "Реквизиты АО «Селектел» с ИНН 7810962785 и адресом официального сайта selectel.ru опубликованы на самом сайте."
       }
     ]
   },
@@ -123,15 +115,14 @@
     "inn": "7810353960",
     "domain": "timeweb.com",
     "status": "found",
-    "stage": "live-final",
     "gold_source": "https://timeweb.com/ru/contacts/",
     "accepted_evidence": [
       {
-        "url": "https://timeweb.com/ru/personal-data-apps/",
+        "url": "https://timeweb.com/ru/contacts/",
         "kind": "html",
-        "quote_excerpt": "и гарантии обеспечения защиты персональных данных в АО «ТаймВэб» (ИНН: 7810353960, 196006, г. Санкт-Петербург, ул. Заставская, д. 22, к. 2, лит. А)",
-        "quote_sha256": "0b7afff0d65938a33a19c9d0badc2704cb022e2b69e31daec5c0fee1e8ca4b19",
-        "reason": "Политика называет АО «ТаймВэб» оператором и прямо указывает, что она применяется при использовании официального сайта компании timeweb.com."
+        "quote_excerpt": "Санкт-Петербург, ул. Заставская, д. 22, корп.2, лит. А ИНН : 7810353960 КПП : 781001001 ОГРН : 1247800127112 Расчетный счет : 40702810055100186127 Наименование",
+        "quote_sha256": "4f8a5ef371a576537456c330387cc25caa3f1a7bbac9cd1c42bd6e291e1f7c53",
+        "reason": "Страница контактов сайта Timeweb указывает АО «ТаймВэб», искомый ИНН и адрес организации в Санкт-Петербурге. Это корпоративный сайт и основной бренд компании."
       }
     ]
   },
@@ -139,15 +130,14 @@
     "inn": "7733568767",
     "domain": "reg.ru",
     "status": "found",
-    "stage": "live-final",
     "gold_source": "https://help.reg.ru/support/pravovyye-voprosy/dogovory/kak-zaklyuchit-dogovor-s-reg-ru",
     "accepted_evidence": [
       {
-        "url": "https://www.reg.ru/company/requisites_and_docs",
-        "kind": "remote",
-        "quote_excerpt": "мая 2023 г. N 449) 7.01; 6.01; 5.01; 2.01 ИНН 7733568767 КПП 774301001 Адрес юридического лица 125315, г. Москва, вн.тер.г. муниципальный округ",
-        "quote_sha256": "9110b61d9f8db4ebcfe723f79bce81ac141ca56d7e160e76ef1c7e6295121faa",
-        "reason": "На странице реквизитов reg.ru указаны искомый ИНН, наименование организации и сайт WWW reg.ru."
+        "url": "https://img.reg.ru/faq/politika_obrabotki_personalnyh_dannyh_010425.pdf",
+        "kind": "pdf",
+        "quote_excerpt": "в Политике 1.1. Настоящий документ определяет политику ООО «РЕГ.РУ», ИНН 7733568767, адрес: 125315, г. Москва, вн.тер. г. муниципальный округ Аэропорт, Ленинградский пр-кт,",
+        "quote_sha256": "dedf19d82927a9b1b1a1e4155502103202df6233b6f5e24c724816d081afd054",
+        "reason": "Политика обработки персональных данных на домене reg.ru называет ООО «РЕГ.РУ» и указывает ИНН 7733568767. Это подтверждает сайт организации и её основной бренд."
       }
     ]
   },
@@ -155,15 +145,14 @@
     "inn": "4401116480",
     "domain": "sovcombank.ru",
     "status": "found",
-    "stage": "live-final",
     "gold_source": "https://sovcombank.ru/about/pages/requisites",
     "accepted_evidence": [
       {
-        "url": "https://invest.sovcombank.ru/contacts",
-        "kind": "remote",
-        "quote_excerpt": "юридического лица: ****01 сентября 2014 г.**** Идентификационный номер налогоплательщика (ИНН): ****4401116480.**** Telex: ****485556 SVKB RU**** Reuters: ****SVCB**** Код в СПФС: ****SOMRRUMMXXX**** [О",
-        "quote_sha256": "b5c28f1b30be66b5a0fe472ec556d1337a69a759566bd6c6bfdd5c8e24044fa4",
-        "reason": "На странице Совкомбанк Инвестиции указаны реквизиты самого ПАО «Совкомбанк», включая искомый ИНН; это собственный сервис банка на его домене."
+        "url": "https://sovcombank.ru/apply/business/static/%D0%90%D0%BA%D1%86%D0%B8%D1%8F%20%D0%B4%D0%BB%D1%8F%20%D0%BA%D0%BE%D1%80%D0%BF%D0%BE%D1%80%D0%B0%D1%82%D0%B8%D0%B2%D0%BD%D1%8B%D1%85%20%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BE%D0%B2-9bbdada7d3a2a939744e92e37cbe4a5a.pdf",
+        "kind": "pdf",
+        "quote_excerpt": "г. Кострома, пр- т Текстильщиков, д. 46, ОГРН 1144400000425, ИНН 4401116480. ДКБО Договор комплексного банковского обслуживания юридических лиц, индивидуальных предпринимателей и физических",
+        "quote_sha256": "e221ad628b7df4aaaa64b05dd2c6243bbb3eae3b57ab09f5b062bc4e0655d4b8",
+        "reason": "Документ на sovcombank.ru прямо называет ПАО «Совкомбанк» организатором акции и приводит искомый ИНН. Это основной корпоративный сайт банка."
       }
     ]
   },
@@ -171,15 +160,14 @@
     "inn": "7710140679",
     "domain": "tbank.ru",
     "status": "found",
-    "stage": "live-final",
     "gold_source": "https://secrets.tbank.ru/cookie-policy/",
     "accepted_evidence": [
       {
-        "url": "https://www.tbank.ru/privacy/",
-        "kind": "remote",
-        "quote_excerpt": "во время использования Сайта; **1.2. Банк**— Акционерное общество «ТБанк» (ИНН 7710140679, ОГРН 1027739642281, адрес:127287, г.Москва, вн.тер.г. муниципальный округ Савеловский, ул.2-я Хуторская, д.38А,",
-        "quote_sha256": "7eb3ea89df2b4b123ad22feb1f261b8a2530f73098efdea8de48de1d380257ca",
-        "reason": "The site’s cookie terms identify АО «ТБанк» as the bank and define the site at tbank.ru; the site presents the bank and its services."
+        "url": "https://www.tbank.ru/about/properties/",
+        "kind": "html",
+        "quote_excerpt": "Р/С h3 30232810100000000004 h3 БИК h3 044525974 h3 ИНН/КПП h3 7710140679/771301001 h3 Код ОКПО h3 29290881 h3 Код ОКОГУ h3 1500010 h3",
+        "quote_sha256": "283ceec1223a898a9d35c3d5469a30dbcc3e78b6a80d2b19922aeff61e7b2e97",
+        "reason": "На странице реквизитов сайта указан ИНН 7710140679 и наименование АО «ТБанк»; главная страница представляет банковские продукты и услуги Т‑Банка. Это единственный подтверждённый собственный домен."
       }
     ]
   },
@@ -187,15 +175,14 @@
     "inn": "9701004306",
     "domain": "fitmost.ru",
     "status": "found",
-    "stage": "live-final",
     "gold_source": "https://www.fitmost.ru/documents/offer_21.11.2025.pdf",
     "accepted_evidence": [
       {
-        "url": "https://blog.fitmost.ru/about",
+        "url": "https://lp.fitmost.ru/bioniq",
         "kind": "html",
-        "quote_excerpt": "101000, г.Москва, переулок Архангельский д.9 офис 6. ОГРН: 1157746727533 ИНН: 9701004306 КПП: 770101001 Банковские реквизиты: Наименование банка: АО \"АЛЬФА-БАНК\" Р/счет: 40702810402200004276 БИК:",
-        "quote_sha256": "6e6cddb6cf930191bcea34c28fcbc1afcbbe9e84dec99777e8e6137a7c07805e",
-        "reason": "Страница сайта описывает услуги FITMOST и содержит реквизиты ООО «Фитмост» с искомым ИНН; это основной корпоративный сайт."
+        "quote_excerpt": "ЗОНА, ВРЕМЯ, ТОВАРЫ И ПРЕДЛОЖЕНИЯ ОГРАНИЧЕНЫ. ПРОДАВЕЦ ООО «ФИТМОСТ» ИНН 9701004306, ОГРН 1157746727533,115054, г. МОСКВА, ул. ПЯТНИЦКАЯ, 71/5, СТРОЕНИЕ 2, ОФИС 404.",
+        "quote_sha256": "14fcab306141a55b0b88b17fe05d671795b6f4af4c75115b7184351adda03d9d",
+        "reason": "Страница на поддомене fitmost.ru указывает ООО «ФИТМОСТ» с искомым ИНН как продавца и содержит ссылку «САЙТ FITMOST» на основной сайт бренда."
       }
     ]
   },
@@ -203,15 +190,14 @@
     "inn": "7703809969",
     "domain": "mann-ivanov-ferber.ru",
     "status": "found",
-    "stage": "live-final",
     "gold_source": "https://www.mann-ivanov-ferber.ru/oferta-na-okazanie-platnyh-uslug",
     "accepted_evidence": [
       {
-        "url": "https://www.mann-ivanov-ferber.ru/about/contact/",
+        "url": "https://www.mann-ivanov-ferber.ru/help/offer/",
         "kind": "html",
-        "quote_excerpt": "пер., д.7 , стр.2 , оф. 24 ОГРН 1147746441963 ИНН 7703809969 Для СМИ Запросить верстки, обложки, предложить материал и обсудить идею для",
-        "quote_sha256": "23ba507c8b61e674aaed8e71cc5278224122a23c4cbc88dbd6bb220534ece393",
-        "reason": "На странице контактов издательства указаны его юридическая информация и ИНН; сайт представляет издательство и его книги."
+        "quote_excerpt": "(Продавец) — Общество с ограниченной ответственностью «МИФ», ОГРН 1147746441963, ИНН 7703809969 КПП 770301001, адрес (место нахождения): 123104, г. Москва, Б. Козихинский пер.,",
+        "quote_sha256": "92c269b5f1938a71a417d393ccd7e2f1fd4d5a76c3579c898dd52a2561d4748a",
+        "reason": "В пользовательском соглашении на сайте ООО «МИФ» прямо указано продавцом и оператором сайта; приведены ИНН 7703809969 и адрес в Москве."
       }
     ]
   },
@@ -219,39 +205,51 @@
     "inn": "7724709637",
     "domain": null,
     "status": "ambiguous",
-    "stage": "live-final",
     "gold_source": "https://fotoproekt.ru/requisites",
     "accepted_evidence": []
   },
   {
     "inn": "7719571260",
-    "domain": null,
-    "status": "search_error",
-    "stage": "live-final",
+    "domain": "litres.ru",
+    "status": "found",
     "gold_source": "https://www.litres.ru/company/contacts/",
-    "accepted_evidence": []
+    "accepted_evidence": [
+      {
+        "url": "https://www.litres.ru/company/contacts/",
+        "kind": "html",
+        "quote_excerpt": "д. 16/1, стр. 5, БЦ \"Останкино\" Реквизиты компании «ЛитРес» ИНН: 7719571260 КПП: 771501001 ОГРН: No 1057748936398 от 07.11.2005 г. Межрайонная ИФНС No46",
+        "quote_sha256": "03115c8ea3c1914c57ee0f238d39bccf793fadcf8774a8c03cbd2c8278029b98",
+        "reason": "Страница контактов указывает реквизиты ООО «ЛитРес» и описывает ЛитРес как сервис электронных и аудиокниг."
+      }
+    ]
   },
   {
     "inn": "7703270067",
-    "domain": null,
-    "status": "insufficient_evidence",
-    "stage": "live-final",
+    "domain": "auchan.ru",
+    "status": "found",
     "gold_source": "https://www.auchan.ru/b2b/publichnaya-oferta/",
-    "accepted_evidence": []
+    "accepted_evidence": [
+      {
+        "url": "https://www.auchan.ru/storage/infopage_Yf9e5N24/pravila.pdf?from=landingGiftCard",
+        "kind": "pdf",
+        "quote_excerpt": "1. Общие положения 1.1. Общество с ограниченной ответственностью «АШАН», ИНН 7703270067, ОГРН 1027739329408, адрес места нахождения: Российская Федерация, 141031, Московская обл., городской",
+        "quote_sha256": "1df68de1110b253a14c0cf6066a1de84616540f84fb2c4f29ab1f50efe07c1fd",
+        "reason": "Правила на сайте называют ООО «АШАН» продавцом подарочных карт и связывают с ним ИНН 7703270067."
+      }
+    ]
   },
   {
     "inn": "7728551528",
     "domain": "sportmaster.ru",
     "status": "found",
-    "stage": "live-final",
     "gold_source": "https://www.sportmaster.ru/upload/content/contentgate/prod/ru_sm/dip_content/2026/news/game/28_05/files_game_rules.pdf",
     "accepted_evidence": [
       {
-        "url": "https://cdn.sportmaster.ru/upload/content/cmsgate/ru_sm/smprod/dip_content/2023/news/51139276__19_06/rules_event.pdf",
+        "url": "https://cdn.sportmaster.ru/upload/content/cmsgate/ru_sm/smprod/dip_content/2024/news/97482058_02_12/rooles-ny.pdf",
         "kind": "pdf",
-        "quote_excerpt": "ОРГАНИЗАТОРЫ. Организатором Мероприятия является Общество с ограниченной ответственностью «Спортмастер», ИНН 7728551528, КПП 997350001, ОГРН 1057747320278, адрес местонахождения: 117437, г. Москва, ул. Миклухо-",
-        "quote_sha256": "d70d096491d2cbc83d64be0dff69afe6798900919db8f9635d8342f90d3264d2",
-        "reason": "Документ на домене sportmaster.ru называет ООО «Спортмастер» организатором мероприятия; сайт представляет основной интернет-магазин бренда."
+        "quote_excerpt": "Правилах: 3.1. Организатор Конкурса (далее — Организатор): ООО «Спортмастер», ИНН 7728551528, КПП 997350001, ОГРН 1057747320278. Адрес местонахождения: Россия, 117437, г. Москва, ул.",
+        "quote_sha256": "d0cef868590bd4ab21f29737925e58a756329084f9686133bdf2d04f2a96f7d1",
+        "reason": "В правилах мероприятия на домене Sportmaster указано, что ООО «Спортмастер» с ИНН 7728551528 является организатором. Сайт представляет основной бренд компании."
       }
     ]
   }

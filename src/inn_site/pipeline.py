@@ -1,4 +1,5 @@
 import asyncio
+import json
 import time
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
@@ -7,18 +8,19 @@ from urllib.parse import urldefrag, urlsplit
 
 import httpx
 
-from inn_site.fetch import LINK_WORDS, Fetcher, excerpts
+from inn_site.fetch import Fetcher, excerpts
 from inn_site.llm import DEFAULT_MODEL, LLMError, Ollama, OpenRouter
 from inn_site.models import Candidate, Evidence, Resolution, SearchHit
+from inn_site.registry import URL as REGISTRY_URL
+from inn_site.registry import identify
 from inn_site.rules import (
     choose_domain,
-    contact_domains,
     excluded,
     has_inn,
     host_of,
+    ownership_evidence,
     site_domain,
     valid_inn,
-    verified_name,
 )
 from inn_site.search import Cache, ProviderError, Search
 
@@ -28,15 +30,17 @@ class Settings:
     model: str = DEFAULT_MODEL
     llm_provider: str = "openrouter"
     ollama_url: str = "http://127.0.0.1:11434"
-    search_provider: str = "searx"
+    search_provider: str = "crw"
     searx_url: str = "http://127.0.0.1:8888"
-    crw_url: str | None = None
+    crw_url: str | None = "http://127.0.0.1:3080"
     cache_dir: Path | None = Path(".cache/inn-site")
-    max_searches: int = 3
+    max_searches: int = 4
+    max_steps: int = 9
     max_pages: int = 12
     max_candidates: int = 6
-    deadline_seconds: int = 240
+    deadline_seconds: int = 300
     remote_fallback: bool = True
+    identity_lookup: bool = True
     budget_file: Path = Path(".cache/llm-spend.json")
     budget_usd: float = 0.25
 
@@ -52,11 +56,13 @@ class Finder:
         self.discovered: list[SearchHit] = []
         self.metadata_reads = 0
         self.retired_ids: set[str] = set()
+        self.registry_operations: list[dict] = []
+        self.confirmed_ownership: dict[str, str] = {}
 
     def active_candidates(self):
         return [c for c in self.candidates if c.id not in self.retired_ids]
 
-    def add_evidence(self, url: str, kind: str, text: str, candidate_id=None):
+    def add_evidence(self, url: str, kind: str, text: str, candidate_id=None, links=None):
         e = Evidence(
             f"e{len(self.evidence) + 1}",
             url,
@@ -64,6 +70,7 @@ class Finder:
             text,
             candidate_id,
             datetime.now(UTC).isoformat(),
+            links or [],
         )
         self.evidence.append(e)
 
@@ -74,102 +81,73 @@ class Finder:
 
         return any(key(url) == key(u) for u in self.read_urls)
 
-    async def collect(self, hits, inn: str, turn: int):
-        # Оставляем URL на уточняющие запросы, чтобы ранние ложные кандидаты
-        # не исчерпали весь бюджет до появления страницы с реквизитами.
-        reserve = 3 * (self.settings.max_searches - turn - 1)
-        read_limit = max(len(self.read_urls), self.settings.max_pages - reserve)
-        # Карточка нужна ради ссылки на сайт; её домен не становится ответом.
-        for h in hits:
+    async def collect(self, hits, inn: str, turn: int, *, selected: bool = False):
+        read_limit = self.settings.max_pages
+        hits = sorted(hits, key=lambda h: not has_inn(h.title + h.text, inn))
+        pending, per_domain = [], {}
+        for hit in hits:
+            url = urldefrag(hit.url)[0]
             try:
-                is_card = excluded(h.url)
+                is_card, domain = excluded(url), site_domain(url)
             except ValueError:
                 continue
-            if is_card and has_inn(h.title + h.text, inn) and self.metadata_reads < 2:
-                if not self.was_read(h.url) and len(self.read_urls) < read_limit:
-                    self.metadata_reads += 1
-                    self.read_urls.add(h.url)
-                    page = await self.fetcher.fetch(h.url, inn)
-                    if page and has_inn(page.text, inn):
-                        self.add_evidence(page.url, page.kind, excerpts(page.text, inn, 3500))
-                        self.discovered.extend(
-                            SearchHit(u, "Сайт из карточки организации", "") for u in page.hints
-                        )
-                        self.discovered.extend(
-                            SearchHit("https://" + d + "/", "Контактный домен из карточки", "")
-                            for d in contact_domains(page.text)
-                        )
-                    break
-        hits = sorted(
-            self.discovered + hits,
-            key=lambda h: (not has_inn(h.title + h.text, inn), not LINK_WORDS.search(h.url)),
-        )
-        self.discovered = []
-        pending = []
-        per_domain = {}
-        for h in hits:
-            h.url = urldefrag(h.url)[0]
-            self.add_evidence(h.url, "search", (h.title + "\n" + h.text)[:2000])
-            try:
-                if excluded(h.url):
+            if not selected:
+                self.add_evidence(url, "search", (hit.title + "\n" + hit.text)[:2000])
+            candidate = next((c for c in self.candidates if c.domain == domain), None)
+            if is_card:
+                if not selected or self.metadata_reads >= 3:
                     continue
-                domain = site_domain(h.url)
-            except ValueError:
-                continue
-            c = next((x for x in self.candidates if x.domain == domain), None)
-            if c is None:
+                candidate = None
+            elif candidate is None:
                 if len(self.active_candidates()) >= self.settings.max_candidates:
                     continue
-                c = Candidate(f"c{len(self.candidates) + 1}", domain)
-                self.candidates.append(c)
-            elif c.id in self.retired_ids:
-                if (
-                    not has_inn(h.title + h.text, inn)
-                    or len(self.active_candidates()) >= self.settings.max_candidates
-                ):
+                candidate = Candidate(f"c{len(self.candidates) + 1}", domain)
+                self.candidates.append(candidate)
+            elif candidate.id in self.retired_ids:
+                if not selected and not has_inn(hit.title + hit.text, inn):
                     continue
-                self.retired_ids.remove(c.id)
-            if h.url not in c.urls:
-                c.urls.append(h.url)
-            if (
-                not self.was_read(h.url)
-                and len(self.read_urls) < read_limit
-                and per_domain.get(domain, 0) < 2
-            ):
-                self.read_urls.add(h.url)
-                pending.append((c, h.url))
-                per_domain[domain] = per_domain.get(domain, 0) + 1
+                self.retired_ids.remove(candidate.id)
+            if candidate and url not in candidate.urls:
+                candidate.urls.append(url)
+            if not selected:
+                continue
+            if self.was_read(url) or len(self.read_urls) >= read_limit:
+                continue
+            if not selected and per_domain.get(domain, 0) >= 2:
+                continue
+            self.read_urls.add(url)
+            if is_card:
+                self.metadata_reads += 1
+            per_domain[domain] = per_domain.get(domain, 0) + 1
+            pending.append((candidate, url))
 
-        async def read(c, url):
+        async def read(candidate, url):
             page = await self.fetcher.fetch(url, inn)
-            return c, page
+            if candidate:
+                (candidate.read_urls if page else candidate.failed_urls).append(url)
+            if not page:
+                return
+            options = list(dict.fromkeys(page.links + page.hints))
+            links = [{"url": u, "label": page.link_labels.get(u, "")} for u in options]
+            if excluded(page.url):
+                self.add_evidence(page.url, page.kind, excerpts(page.text, inn, 3500), links=links)
+                return
+            domain = site_domain(page.url)
+            if not candidate or candidate.domain != domain:
+                candidate = next((c for c in self.candidates if c.domain == domain), None)
+                if candidate is None:
+                    if len(self.active_candidates()) >= self.settings.max_candidates:
+                        return
+                    candidate = Candidate(f"c{len(self.candidates) + 1}", domain, [page.url])
+                    self.candidates.append(candidate)
+            self.add_evidence(
+                page.url, page.kind, excerpts(page.text, inn, 5500), candidate.id, links
+            )
+            for u in page.links:
+                if u not in candidate.urls:
+                    candidate.urls.append(u)
 
-        def remember(c, page):
-            if page:
-                domain = site_domain(page.url)
-                if excluded(page.url):
-                    return
-                if domain != c.domain:
-                    c = next((x for x in self.candidates if x.domain == domain), None)
-                    if c is None:
-                        if len(self.active_candidates()) >= self.settings.max_candidates:
-                            return
-                        c = Candidate(f"c{len(self.candidates) + 1}", domain, [page.url])
-                        self.candidates.append(c)
-                self.add_evidence(page.url, page.kind, excerpts(page.text, inn, 5500), c.id)
-
-        pages = await asyncio.gather(*(read(c, u) for c, u in pending))
-        for depth in range(3):
-            extra = []
-            for c, p in pages:
-                remember(c, p)
-                if depth == 2 or not p or has_inn(p.text, inn):
-                    continue
-                for link in p.links[:2]:
-                    if not self.was_read(link) and len(self.read_urls) < read_limit:
-                        self.read_urls.add(link)
-                        extra.append((c, link))
-            pages = await asyncio.gather(*(read(c, u) for c, u in extra))
+        await asyncio.gather(*(read(c, u) for c, u in pending))
 
     def context(self, inn: str) -> list[Evidence]:
         # Сначала страницы с ИНН, затем сведения о компании и остальные страницы.
@@ -183,98 +161,154 @@ class Finder:
             if remaining < 500:
                 break
             text = excerpts(e.text, inn, min(cap, remaining))
-            chosen.append(Evidence(e.id, e.url, e.kind, text, e.candidate_id, e.fetched_at))
+            chosen.append(
+                Evidence(e.id, e.url, e.kind, text, e.candidate_id, e.fetched_at, e.links)
+            )
             remaining -= len(text)
         return chosen
 
     async def run(self, inn: str) -> tuple[str | None, str]:
-        hints = []
-        catalog_url = f"https://fbc.ru/inn/{inn}/"
-        self.read_urls.add(catalog_url)
-        catalog = await self.fetcher.fetch(catalog_url, inn)
-        if catalog and has_inn(catalog.text, inn):
-            self.add_evidence(catalog.url, "html", excerpts(catalog.text, inn, 3000))
-            hints = [
-                SearchHit("https://" + d + "/", "Контактный домен из каталога", "")
-                for d in contact_domains(catalog.text)
-            ]
-            hints.extend(SearchHit(u, "Сайт из карточки", "") for u in catalog.hints)
-        query = f"{inn} официальный сайт реквизиты"
-        used_queries = set()
-        status = "insufficient_evidence"
-        for turn in range(self.settings.max_searches):
-            if query.casefold() in used_queries:
-                break
-            used_queries.add(query.casefold())
-            try:
-                hits = await self.search.search(query, inn)
-            except ProviderError as e:
-                self.search_failures.append(str(e))
-                if not hints and not self.candidates:
-                    raise
-                hits = []
-            await self.collect(hints + hits, inn, turn)
-            hints = []
-            if not self.evidence:
-                query = f'"{inn}" контакты организация'
+        query, action, requested = f'"{inn}"', "search", []
+        for source in self.evidence:
+            if source.kind != "registry":
                 continue
-            context = self.context(inn)
-            active = self.active_candidates()
-            review = await self.llm.review(inn, active, context)
+            for record in json.loads(source.text).get("records", []):
+                name = record.get("c") or record.get("n")
+                if record.get("i") == inn and name:
+                    query = f"{name} {record.get('rn') or ''} официальный сайт"
+                    break
+        used_queries, searches = set(), 0
+        status = "insufficient_evidence"
+        repair_used = False
+        primary_check = None
+        current_owners = set()
+        for step in range(self.settings.max_steps):
+            if action == "search":
+                if searches >= self.settings.max_searches or query.casefold() in used_queries:
+                    break
+                searches += 1
+                used_queries.add(query.casefold())
+                try:
+                    hits = await self.search.search(query, inn)
+                except ProviderError as error:
+                    self.search_failures.append(str(error))
+                    if not self.evidence and not self.candidates:
+                        raise
+                    hits = []
+                await self.collect(hits, inn, searches - 1)
+            elif action == "read":
+                known = {u for c in self.candidates for u in c.urls}
+                known.update(link["url"] for e in self.evidence for link in e.links)
+                known.update(e.url for e in self.evidence if e.kind == "search")
+                requested = [u for u in requested if u in known and not self.was_read(u)]
+                if not requested:
+                    break
+                await self.collect(
+                    [SearchHit(u, "Выбрано моделью для чтения", "") for u in requested],
+                    inn,
+                    searches - 1,
+                    selected=True,
+                )
+            context, active = self.context(inn), self.active_candidates()
+            review = await self.llm.review(
+                inn,
+                active,
+                context,
+                state={
+                    "used_queries": sorted(used_queries),
+                    "searches_remaining": self.settings.max_searches - searches,
+                    "steps_remaining": self.settings.max_steps - step - 1,
+                    "visited_urls": sorted(self.read_urls),
+                    "urls_remaining": self.settings.max_pages - len(self.read_urls),
+                    "search_errors": self.search_failures,
+                    "page_errors": [o for o in self.fetcher.operations if o.get("error")][-8:],
+                    "validation_error": (
+                        "Проверка свидетельств отклонила ответ: источник с ИНН либо "
+                        "сравнительная цитата не подтверждены. Цитата должна быть дословной, "
+                        "без склеивания фрагментов и добавленных многоточий. Исправь её "
+                        "по тексту источника или продолжи проверку."
+                        if status == "invalid_model_evidence"
+                        else None
+                    ),
+                    "primary_check": primary_check,
+                    "confirmed_ownership": self.confirmed_ownership,
+                },
+            )
             domain, status = choose_domain(inn, review, active, context)
+            current_owners = set()
+            for verdict in review.verdicts:
+                source = ownership_evidence(inn, verdict, active, context)
+                if source:
+                    self.confirmed_ownership[verdict.candidate_id] = source.id
+                    current_owners.add(verdict.candidate_id)
             self.rounds.append(
                 {
-                    "query": query,
+                    "operation": action,
+                    "query": query if action == "search" else None,
+                    "read_urls": requested if action == "read" else [],
                     "review": review.model_dump(),
                     "status": status,
                     "domain": domain,
                     "context_evidence_ids": [e.id for e in context],
                 }
             )
-            if domain:
+            if (
+                domain
+                and review.action == "finish"
+                and f'"{inn}"' not in used_queries
+                and searches < self.settings.max_searches
+            ):
+                # До окончательного выбора проверяем другие сайты того же субъекта.
+                action, query, status = "search", f'"{inn}"', "insufficient_evidence"
+                continue
+            if domain and review.action == "finish" and primary_check is None:
+                primary_check = {
+                    "proposed_domain": domain,
+                    "comparison_sources": [s.model_dump() for s in review.comparison_sources],
+                }
+                action, status = "plan", "ambiguous"
+                continue
+            if domain and review.action == "finish":
                 return domain, status
-            if status == "ambiguous":
-                break
+            if review.subject_kind == "private_person" and len(inn) == 12:
+                identity = [
+                    e
+                    for e in context
+                    if e.id in review.subject_evidence_ids
+                    and has_inn(e.text, inn)
+                    and e.kind != "registry"
+                ]
+                no_entity = any(
+                    e.kind == "registry" and json.loads(e.text).get("records") == []
+                    for e in context
+                )
+                if (
+                    identity
+                    and no_entity
+                    and not any(v.relation == "owner" for v in review.verdicts)
+                ):
+                    return None, "outside_scope"
             self.retired_ids.update(
                 v.candidate_id for v in review.verdicts if v.relation == "third_party"
             )
-            name = verified_name(review.company_name, self.evidence, inn)
-            city = verified_name(review.company_city, self.evidence, inn)
-            if turn == 1 or (turn == 0 and self.candidates):
-                likely = review.investigate_candidate_id or next(
-                    (v.candidate_id for v in review.verdicts if v.relation == "owner"), None
-                )
-                candidate = next((c for c in self.candidates if c.id == likely), None)
-                if candidate:
-                    # Уже найденные страницы тоже остаются в очереди: первые две
-                    # могут быть недоступны, а реквизиты находиться в следующей.
-                    for url in candidate.urls:
-                        if not self.was_read(url):
-                            snippet = next(
-                                (
-                                    e.text
-                                    for e in self.evidence
-                                    if e.kind == "search" and e.url == url
-                                ),
-                                "",
-                            )
-                            hints.append(
-                                SearchHit(url, "Найденная ранее страница кандидата", snippet)
-                            )
-                    query = f'site:{candidate.domain} "{inn}"'
-                    if query.casefold() not in used_queries:
-                        continue
-                    query = f'site:{candidate.domain} "{inn}" filetype:pdf'
-                    if query.casefold() not in used_queries:
-                        continue
-            if review.action == "finish" and not (turn == 0 and name):
-                break
-            if name:
-                query = f'"{name}" {city + " " if city else ""}официальный сайт'
-                if query.casefold() in used_queries:
-                    query = f'"{name}" реквизиты контакты {inn}'
+            self.retired_ids.update(c.id for c in active if c.id in review.dismiss_candidate_ids)
+            # Подтверждённые реквизиты остаются в контексте для сравнения доменов.
+            self.retired_ids.difference_update(self.confirmed_ownership)
+            if review.action == "finish" and status == "invalid_model_evidence" and not repair_used:
+                repair_used, action = True, "plan"
+            elif review.action == "read":
+                action, requested = "read", review.read_urls
+            elif review.action == "search" and review.next_query:
+                action, query = "search", review.next_query.strip()
+            elif searches == 0:
+                # Отсутствие записи ФНС не заменяет поиск сайта в интернете.
+                action, query = "search", f'"{inn}"'
             else:
-                query = f'"{inn}" контакты реквизиты -rusprofile.ru -list-org.com'
+                break
+        # Неоднозначность уже установлена прочитанными собственными сайтами.
+        # Ошибка дополнительного поиска сохраняется, но не отменяет эти факты.
+        if status == "ambiguous" and len(current_owners) > 1:
+            return None, status
         return None, "search_error" if self.search_failures else status
 
     def trace(self) -> dict:
@@ -282,11 +316,13 @@ class Finder:
             "candidates": [asdict(c) for c in self.candidates],
             "evidence": [asdict(e) for e in self.evidence],
             "rounds": self.rounds,
+            "registry_operations": self.registry_operations,
             "search_operations": self.search.operations,
             "page_operations": self.fetcher.operations,
             "llm_operations": self.llm.operations,
             "search_failures": self.search_failures,
             "retired_candidate_ids": sorted(self.retired_ids),
+            "confirmed_ownership": self.confirmed_ownership,
         }
 
 
@@ -323,6 +359,13 @@ async def find_site(inn: str, settings: Settings | None = None) -> Resolution:
         async def resolve():
             if isinstance(llm, OpenRouter):
                 await llm.prepare()
+            if settings.identity_lookup:
+                identity, operation = await identify(client, cache, inn)
+                finder.registry_operations.append(operation)
+                if identity:
+                    finder.add_evidence(
+                        REGISTRY_URL, "registry", json.dumps(identity, ensure_ascii=False)
+                    )
             return await finder.run(inn)
 
         try:

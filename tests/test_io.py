@@ -7,6 +7,23 @@ from inn_site.fetch import Fetcher, UnsafeURL, excerpts, html_content, website_h
 from inn_site.search import Cache, ProviderError, Search, parse_hits, rpc_result
 
 
+def test_hydration_json_is_read_as_data_without_executing_javascript():
+    state = json.dumps({"page": {"body": "<p>Оператор сайта — ООО Пример. ИНН 7721581040.</p>"}})
+    html = (
+        '<nav>Главная</nav><script type="application/json">' + state + "</script>"
+        '<script>throw new Error("must not run")</script>'
+    )
+    text, _, _ = html_content(html, "https://example.ru/legal")
+    assert "Оператор сайта — ООО Пример. ИНН 7721581040." in text
+    assert "must not run" not in text
+
+
+def test_middle_links_are_not_lost_between_header_and_footer():
+    html = "".join(f'<a href="/page/{i}">Страница {i}</a>' for i in range(300))
+    _, links, _ = html_content(html, "https://example.ru/")
+    assert "https://example.ru/page/150" in links
+
+
 def test_exa_sse_and_json():
     payload = {"jsonrpc": "2.0", "id": 1, "result": {"content": []}}
     assert rpc_result(json.dumps(payload)) == {"content": []}
@@ -57,13 +74,14 @@ async def test_reader_target_error_is_not_an_evidence_page():
 
 
 def test_html_contacts_and_no_script_text():
-    text, links = html_content(
+    text, links, labels = html_content(
         """<script>fake INN</script><p>Наша компания</p>
         <a href="/legal">Реквизиты</a><a href="https://other.ru/contacts">Партнёр</a>""",
         "https://example.ru/",
     )
     assert "fake INN" not in text
     assert links == ["https://example.ru/legal"]
+    assert labels[links[0]] == "Реквизиты"
 
 
 def test_inn_after_large_navigation_is_kept():
@@ -93,6 +111,37 @@ async def test_http_429_is_reported():
 async def test_malformed_searx_response_is_a_provider_error(body):
     async with httpx.AsyncClient(
         transport=httpx.MockTransport(lambda r: httpx.Response(200, text=body))
+    ) as client:
+        with pytest.raises(ProviderError):
+            await Search(client, Cache(None)).search("query", "7721581040")
+
+
+async def test_partial_engine_failure_is_recorded_without_losing_a_healthy_empty_result():
+    async with httpx.AsyncClient(
+        transport=httpx.MockTransport(
+            lambda r: httpx.Response(
+                200, json={"results": [], "unresponsive_engines": [["duckduckgo", "CAPTCHA"]]}
+            )
+        )
+    ) as client:
+        search = Search(client, Cache(None))
+        assert await search.search("query", "7721581040") == []
+        assert search.operations[0]["unresponsive_engines"] == [["duckduckgo", "CAPTCHA"]]
+
+
+async def test_all_engines_unavailable_is_a_technical_failure():
+    async with httpx.AsyncClient(
+        transport=httpx.MockTransport(
+            lambda r: httpx.Response(
+                200,
+                json={
+                    "results": [],
+                    "unresponsive_engines": [
+                        [name, "CAPTCHA"] for name in ["google cse", "duckduckgo", "bing", "brave"]
+                    ],
+                },
+            )
+        )
     ) as client:
         with pytest.raises(ProviderError):
             await Search(client, Cache(None)).search("query", "7721581040")

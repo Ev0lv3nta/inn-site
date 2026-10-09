@@ -1,0 +1,98 @@
+{
+  "run_at": "2026-10-09T19:54:25.438530+00:00",
+  "python": "3.13.14",
+  "model_info": {
+    "id": "openai/gpt-6-luna",
+    "pricing": {
+      "prompt": "0.0000001",
+      "completion": "0.0000005",
+      "web_search": "0.01",
+      "input_cache_read": "0.00000001",
+      "input_cache_write": "0.000000125",
+      "overrides": [
+        {
+          "min_prompt_tokens": 272000,
+          "prompt": "0.0000002",
+          "completion": "0.00000075",
+          "input_cache_read": "0.00000002",
+          "input_cache_write": "0.00000025"
+        }
+      ]
+    },
+    "context_length": 1050000
+  },
+  "search_provider": "searx",
+  "source_sha256": "d6a1423746660270a91b7ce4c8cae7e08e5f79a1bf04fe9e531bedddfa34f8f2",
+  "rows": [
+    {
+      "inn": "7801451618",
+      "name": "Бегет",
+      "split": "dev",
+      "expected_domains": [
+        "beget.com"
+      ],
+      "gold_source": "https://beget.com/ru/details",
+      "note": "Хостинг: чужие сайты на инфраструктуре компании не являются её сайтом.",
+      "domain": "beget.com",
+      "status": "found",
+      "ok": true,
+      "seconds": 44.44,
+      "search_calls": 8,
+      "read_urls": 3,
+      "cache_hits": 0,
+      "llm_calls": 5,
+      "llm_cost_usd": 0.00612413,
+      "search_failures": 0
+    },
+    {
+      "inn": "7719571260",
+      "name": "ЛитРес",
+      "split": "holdout",
+      "expected_domains": [
+        "litres.ru"
+      ],
+      "gold_source": "https://www.litres.ru/company/contacts/",
+      "note": "Продавец электронных книг; реквизиты на собственном сайте.",
+      "domain": null,
+      "status": "search_error",
+      "ok": false,
+      "seconds": 2.04,
+      "search_calls": 2,
+      "read_urls": 0,
+      "cache_hits": 0,
+      "llm_calls": 0,
+      "llm_cost_usd": 0,
+      "search_failures": 1
+    },
+    {
+      "inn": "7703270067",
+      "name": "АШАН",
+      "split": "holdout",
+      "expected_domains": [
+        "auchan.ru"
+      ],
+      "gold_source": "https://www.auchan.ru/b2b/publichnaya-oferta/",
+      "note": "Розничная торговля; роль продавца в оферте, банковский ИНН может встречаться рядом.",
+      "domain": null,
+      "status": "search_error",
+      "ok": false,
+      "seconds": 1.6,
+      "search_calls": 2,
+      "read_urls": 0,
+      "cache_hits": 0,
+      "llm_calls": 0,
+      "llm_cost_usd": 0,
+      "search_failures": 1
+    }
+  ],
+  "summary": {
+    "cases": 3,
+    "correct": 1,
+    "returned_domains": 1,
+    "wrong_domains": 0,
+    "precision_on_returned": 1.0,
+    "positive_recall": 0.3333333333333333,
+    "median_seconds": 2.04,
+    "errors": 2
+  }
+}

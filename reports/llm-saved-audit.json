@@ -1,0 +1,207 @@
+{
+  "kind": "LLM primary-site audit on previously collected evidence; no new web requests",
+  "source_sha256": "86664024a3de0137040451ce413515d1444ad473346198f9fe3b229fd262bf86",
+  "rows": [
+    {
+      "inn": "7721581040",
+      "previous_domain": "dadata.ru",
+      "domain": "dadata.ru",
+      "status": "found",
+      "action": "finish",
+      "ok": true
+    },
+    {
+      "inn": "9715225506",
+      "previous_domain": "evotor.ru",
+      "domain": "evotor.ru",
+      "status": "found",
+      "action": "finish",
+      "ok": true
+    },
+    {
+      "inn": "9724061893",
+      "previous_domain": "veter.cc",
+      "domain": "veter.cc",
+      "status": "found",
+      "action": "finish",
+      "ok": true
+    },
+    {
+      "inn": "6663003127",
+      "previous_domain": "kontur.ru",
+      "domain": "kontur.ru",
+      "status": "found",
+      "action": "finish",
+      "ok": true
+    },
+    {
+      "inn": "7801451618",
+      "previous_domain": "beget.com",
+      "domain": "beget.com",
+      "status": "found",
+      "action": "finish",
+      "ok": true
+    },
+    {
+      "inn": "7810353960",
+      "previous_domain": "timeweb.com",
+      "domain": "timeweb.com",
+      "status": "found",
+      "action": "finish",
+      "ok": true
+    },
+    {
+      "inn": "7810962785",
+      "previous_domain": "selectel.ru",
+      "domain": "selectel.ru",
+      "status": "found",
+      "action": "finish",
+      "ok": true
+    },
+    {
+      "inn": "7733568767",
+      "previous_domain": "reg.ru",
+      "domain": "reg.ru",
+      "status": "found",
+      "action": "finish",
+      "ok": true
+    },
+    {
+      "inn": "7710140679",
+      "previous_domain": "tbank.ru",
+      "domain": "tbank.ru",
+      "status": "found",
+      "action": "finish",
+      "ok": true
+    },
+    {
+      "inn": "4401116480",
+      "previous_domain": "sovcombank.ru",
+      "domain": "sovcombank.ru",
+      "status": "found",
+      "action": "finish",
+      "ok": true
+    },
+    {
+      "inn": "9701004306",
+      "previous_domain": "fitmost.ru",
+      "domain": "fitmost.ru",
+      "status": "found",
+      "action": "finish",
+      "ok": true
+    },
+    {
+      "inn": "7703270067",
+      "previous_domain": "auchan.ru",
+      "domain": "auchan.ru",
+      "status": "found",
+      "action": "finish",
+      "ok": true
+    },
+    {
+      "inn": "7703809969",
+      "previous_domain": "mann-ivanov-ferber.ru",
+      "domain": "mann-ivanov-ferber.ru",
+      "status": "found",
+      "action": "finish",
+      "ok": true
+    }
+  ],
+  "summary": {
+    "cases": 13,
+    "correct": 13
+  },
+  "operations": [
+    {
+      "model": "openai/gpt-6-luna",
+      "served_model": "openai/gpt-6-luna",
+      "prompt_tokens": 13841,
+      "output_tokens": 1653,
+      "cost": 0.00255655
+    },
+    {
+      "model": "openai/gpt-6-luna",
+      "served_model": "openai/gpt-6-luna",
+      "prompt_tokens": 15858,
+      "output_tokens": 1748,
+      "cost": 0.002856175
+    },
+    {
+      "model": "openai/gpt-6-luna",
+      "served_model": "openai/gpt-6-luna",
+      "prompt_tokens": 15388,
+      "output_tokens": 845,
+      "cost": 0.002345925
+    },
+    {
+      "model": "openai/gpt-6-luna",
+      "served_model": "openai/gpt-6-luna",
+      "prompt_tokens": 17124,
+      "output_tokens": 2540,
+      "cost": 0.003410425
+    },
+    {
+      "model": "openai/gpt-6-luna",
+      "served_model": "openai/gpt-6-luna",
+      "prompt_tokens": 12443,
+      "output_tokens": 1403,
+      "cost": 0.0022568
+    },
+    {
+      "model": "openai/gpt-6-luna",
+      "served_model": "openai/gpt-6-luna",
+      "prompt_tokens": 11907,
+      "output_tokens": 1422,
+      "cost": 0.0021993
+    },
+    {
+      "model": "openai/gpt-6-luna",
+      "served_model": "openai/gpt-6-luna",
+      "prompt_tokens": 20702,
+      "output_tokens": 1906,
+      "cost": 0.003540675
+    },
+    {
+      "model": "openai/gpt-6-luna",
+      "served_model": "openai/gpt-6-luna",
+      "prompt_tokens": 20263,
+      "output_tokens": 621,
+      "cost": 0.0028433
+    },
+    {
+      "model": "openai/gpt-6-luna",
+      "served_model": "openai/gpt-6-luna",
+      "prompt_tokens": 24963,
+      "output_tokens": 719,
+      "cost": 0.0034798
+    },
+    {
+      "model": "openai/gpt-6-luna",
+      "served_model": "openai/gpt-6-luna",
+      "prompt_tokens": 10955,
+      "output_tokens": 2111,
+      "cost": 0.0024248
+    },
+    {
+      "model": "openai/gpt-6-luna",
+      "served_model": "openai/gpt-6-luna",
+      "prompt_tokens": 14006,
+      "output_tokens": 2674,
+      "cost": 0.003087675
+    },
+    {
+      "model": "openai/gpt-6-luna",
+      "served_model": "openai/gpt-6-luna",
+      "prompt_tokens": 26257,
+      "output_tokens": 1157,
+      "cost": 0.00386055
+    },
+    {
+      "model": "openai/gpt-6-luna",
+      "served_model": "openai/gpt-6-luna",
+      "prompt_tokens": 31466,
+      "output_tokens": 2625,
+      "cost": 0.005245675
+    }
+  ]
+}

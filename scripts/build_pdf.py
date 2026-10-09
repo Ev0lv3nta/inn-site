@@ -1,10 +1,11 @@
 """Собрать ответы в один PDF. При публикации достаточно передать GitHub URL."""
 
 import argparse
-import html
-import re
+import json
 from pathlib import Path
+from urllib.parse import urlsplit
 
+from markdown_it import MarkdownIt
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_LEFT
 from reportlab.lib.pagesizes import A4
@@ -13,6 +14,7 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import (
     HRFlowable,
+    KeepTogether,
     PageBreak,
     Paragraph,
     SimpleDocTemplate,
@@ -49,37 +51,37 @@ def register_fonts():
 
 
 def markup(text):
-    text = html.escape(text)
-    text = re.sub(r"\[([^\]]+)\]\((https://[^)]+)\)", r'<a href="\2" color="#235b83">\1</a>', text)
-    text = re.sub(r"`([^`]+)`", r'<font color="#29475b">\1</font>', text)
-    text = re.sub(r"\*\*([^*]+)\*\*", r"<b>\1</b>", text)
-    return text
+    value = MarkdownIt("commonmark", {"html": False}).renderInline(text)
+    return (
+        value.replace("<a href=", '<a color="#235b83" href=')
+        .replace("<code>", '<font color="#29475b">')
+        .replace("</code>", "</font>")
+    )
 
 
 def results_text():
     stages, rows, regression = load_results()
-    final = next(report for stem, _, report in stages if stem == "live-final")
-    h, p, c, n, errors = metric(final["rows"])
-    blind = next(report for stem, _, report in stages if stem == "live-final-holdout")
-    bh, bp, bc, bn, be = metric(blind["rows"])
+    h, p, c, n, errors = metric(rows)
     live = (
-        f"Заключительный прогон всей выборки без локального кеша: {h}/{p} "
+        f"Последние живые результаты по каждому ИНН: {h}/{p} "
         f"подтверждённых основных сайтов, {n - c} ложных доменов. "
         f"Пропусков на положительных эталонах: {p - h}; технических сбоев: {errors}. "
-        "Для нескольких брендов одного юрлица получен ожидаемый null; "
-        "неверный ИНН отклонён до сети. Медиана времени всех входов — "
-        f"{final['summary']['median_seconds']:.1f} с."
+        "После полного контроля повторно проверены четыре пропуска. "
+        "Это объединение последних ответов, а не один безошибочный запуск."
     )
     live += "\n\n| Проверка | Результат |\n| --- | --- |\n"
     live += f"| Подтверждённые основные сайты | {h}/{p}; ложных доменов {n - c} |\n"
-    live += "| Несколько собственных брендов | null, статус ambiguous |\n"
+    ambiguous = next(r for r in rows if r.get("additional_gold_sources"))
+    live += (
+        f"| Несколько собственных брендов | {ambiguous['domain'] or 'null'}, "
+        f"{ambiguous['status']} |\n"
+    )
     live += "| Неверный вход | null, код завершения 2 |\n"
     live += (
-        f"\nВ новом отложенном контроле до изменений поиска было {bh}/{bp}, "
-        f"ложных доменов {bn - bc}, технических ошибок {be}. Затем его пропуски "
-        "использованы для проверки Google CSE. Заключительный прогон выполнен "
-        "уже на известных входах и не является новым слепым контролем. "
-        "Все этапы, включая неудачные, сохранены в reports/validation.md."
+        "\nТекущая LLM дополнительно подтвердила остальные 13 сайтов на сохранённых "
+        "свидетельствах, без нового поиска. Это известные входы после разработки, "
+        "не слепой контроль и не оценка качества на всём ЕГРЮЛ. "
+        "Предыдущие результаты, включая неудачные, сохранены в репозитории."
     )
     stats = regression["summary"]
     reg = (
@@ -98,7 +100,7 @@ def paragraphs(text, styles):
 
     def flush():
         if buffer:
-            story.append(Paragraph(markup(" ".join(buffer)), styles["Text"]))
+            story.append(KeepTogether([Paragraph(markup(" ".join(buffer)), styles["Text"])]))
             buffer.clear()
 
     lines = text.splitlines()
@@ -127,7 +129,7 @@ def paragraphs(text, styles):
             table_rows = []
             while i < len(lines) and lines[i].strip().startswith("|"):
                 raw = lines[i].strip()
-                if not re.fullmatch(r"[| :\-]+", raw):
+                if not all(c in "| :-" for c in raw):
                     cells = [
                         Paragraph(markup(c.strip()), styles["Cell"])
                         for c in raw.strip("|").split("|")
@@ -159,7 +161,7 @@ def paragraphs(text, styles):
             )
             story.extend([table, Spacer(1, 10)])
             continue
-        elif re.match(r"^\d+\. ", line):
+        elif line.partition(". ")[0].isdigit() and ". " in line:
             flush()
             story.append(Paragraph(markup(line), styles["Item"]))
         else:
@@ -173,7 +175,7 @@ def footer(canvas, doc):
     canvas.saveState()
     canvas.setFont("Body", 8)
     canvas.setFillColor(colors.HexColor("#637585"))
-    canvas.drawString(56, 30, "DaData · Тестовое задание AI/LLM инженера · 09.10.2026")
+    canvas.drawString(56, 30, "DaData · Тестовое задание AI/LLM инженера · 10.10.2026")
     canvas.drawRightString(A4[0] - 56, 30, str(doc.page))
     canvas.restoreState()
 
@@ -183,10 +185,25 @@ def main():
     parser.add_argument("--github-url")
     parser.add_argument("--output", type=Path, default=ROOT.parent / "dadata-solution.pdf")
     args = parser.parse_args()
-    if args.github_url and not re.fullmatch(
-        r"https://github\.com/[\w.-]+/[\w.-]+/?", args.github_url
-    ):
-        parser.error("Нужен URL репозитория GitHub")
+    if args.github_url:
+        parsed = urlsplit(args.github_url)
+        parts = parsed.path.strip("/").split("/")
+        if (
+            parsed.scheme != "https"
+            or parsed.netloc != "github.com"
+            or parsed.query
+            or parsed.fragment
+            or len(parts) != 2
+            or any(
+                not part
+                or any(
+                    c not in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_.-"
+                    for c in part
+                )
+                for part in parts
+            )
+        ):
+            parser.error("Нужен URL репозитория GitHub")
     repo = (
         f"[GitHub]({args.github_url})"
         if args.github_url
@@ -226,6 +243,8 @@ def main():
     live, regression = results_text()
     practice = practice.replace("{{REPOSITORY}}", repo).replace("{{LIVE_RESULTS}}", live)
     practice = practice.replace("{{REGRESSION_RESULTS}}", regression)
+    checks = json.loads((ROOT / "reports/checks.json").read_text())
+    practice = practice.replace("{{OFFLINE_TESTS}}", str(checks["pytest"]["passed"]))
     if "{{" in practice:
         raise ValueError("Не все поля PDF заполнены")
     (ROOT / "docs/practice.md").write_text(practice)

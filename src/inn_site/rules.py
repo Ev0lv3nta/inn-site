@@ -1,5 +1,4 @@
 import ipaddress
-import re
 import socket
 import unicodedata
 from urllib.parse import urlsplit
@@ -64,7 +63,11 @@ def normalize_text(text: str) -> str:
 
 
 def valid_inn(inn: str) -> bool:
-    if not isinstance(inn, str) or not re.fullmatch(r"[0-9]{10}|[0-9]{12}", inn):
+    if (
+        not isinstance(inn, str)
+        or len(inn) not in {10, 12}
+        or any(c not in "0123456789" for c in inn)
+    ):
         return False
     if len(set(inn)) == 1:
         return False
@@ -81,7 +84,19 @@ def valid_inn(inn: str) -> bool:
 
 
 def has_inn(text: str, inn: str) -> bool:
-    return bool(re.search(rf"(?<![0-9]){re.escape(inn)}(?![0-9])", text))
+    return bool(inn_positions(text, inn))
+
+
+def inn_positions(text: str, inn: str) -> list[int]:
+    positions, start = [], 0
+    while (pos := text.find(inn, start)) >= 0:
+        end = pos + len(inn)
+        if (pos == 0 or not text[pos - 1].isdigit()) and (
+            end == len(text) or not text[end].isdigit()
+        ):
+            positions.append(pos)
+        start = end
+    return positions
 
 
 def host_of(url: str) -> str:
@@ -104,18 +119,23 @@ def site_domain(url: str) -> str:
 
 def excluded(url: str) -> bool:
     host = host_of(url)
-    if re.match(
-        r"/(business/contractor|kontragent|tool/ocompany|references/organizations|proverka|"
-        r"banking_sector/credit/coinfo|finorg/foinfo)/",
-        urlsplit(url).path,
-        re.I,
-    ):
+    path = urlsplit(url).path.casefold()
+    card_paths = (
+        "/business/contractor/",
+        "/kontragent/",
+        "/tool/ocompany/",
+        "/references/organizations/",
+        "/proverka/",
+        "/banking_sector/credit/coinfo/",
+        "/finorg/foinfo/",
+    )
+    if path.startswith(card_paths):
         return True
     if host.startswith("kontragent."):
         return True
     if (host.endswith("find-org.net") and urlsplit(url).path.startswith("/cli/")) or (
         host in {"licexpert.ru", "bbnt.ru", "ruinn.ru", "iswork.ru", "blank-kit.ru"}
-        and re.match(r"/(company|contractor)/", urlsplit(url).path)
+        and path.startswith(("/company/", "/contractor/"))
     ):
         return True
     if host == "basis.myseldon.com" or host.endswith("jsprav.ru"):
@@ -158,42 +178,23 @@ def public_url(url: str) -> str:
     return url
 
 
-def directory_text(text: str) -> bool:
-    text = normalize_text(text).casefold()
-    markers = [
-        "сводка об организации",
-        "добавить в наблюдение",
-        "выгрузить в excel",
-        "для отображения скрытых данных приобретите доступ",
-        "выписка из егрюл",
-    ]
-    return sum(marker in text for marker in markers) >= 2
-
-
-def contact_domains(text: str) -> list[str]:
-    """Домены из контактного блока каталога - только неподтверждённые кандидаты."""
-    match = re.search(r"Контакты\s+(.+?)(?:\s+Адрес\s+|\s+Виды деятельности\s+|$)", text, re.I)
-    fragments = [match[1][:1000]] if match else []
-    fragments.extend(
-        m.group(1)
-        for m in re.finditer(
-            r"(?:официальный\s+сайт|веб-сайт|website|сайт(?:\s+компании)?)\s*[:：]?\s*"
-            r"((?:https?://)?[\w.-]+\.[\w-]+)",
-            text,
-            re.I,
-        )
-    )
-    domains = []
-    for value in re.findall(r"[\w-]+(?:\.[\w-]+)+", " ".join(fragments)):
-        try:
-            host = host_of("https://" + value)
-            if _extract(host).suffix and not excluded("https://" + host):
-                domain = site_domain("https://" + host)
-                if domain not in domains:
-                    domains.append(domain)
-        except ValueError:
-            continue
-    return domains[:2]
+def ownership_evidence(inn, verdict, candidates, evidence):
+    candidate = next((c for c in candidates if c.id == verdict.candidate_id), None)
+    source = next((e for e in evidence if e.id == verdict.evidence_id), None)
+    if (
+        verdict.relation != "owner"
+        or not candidate
+        or not source
+        or source.candidate_id != candidate.id
+        or source.kind in {"search", "registry"}
+    ):
+        return None
+    quote = normalize_text(verdict.quote)
+    if len(quote) < 16 or quote not in normalize_text(source.text) or not has_inn(quote, inn):
+        return None
+    if excluded(source.url) or site_domain(source.url) != candidate.domain:
+        return None
+    return source
 
 
 def choose_domain(
@@ -203,6 +204,7 @@ def choose_domain(
     by_evidence = {e.id: e for e in evidence}
     accepted = set()
     owners = set()
+    unsupported_main = False
     seen = {}
     for v in review.verdicts:
         signature = (v.relation, v.main_site)
@@ -211,32 +213,49 @@ def choose_domain(
         seen[v.candidate_id] = signature
         if v.relation != "owner":
             continue
-        c, e = by_candidate.get(v.candidate_id), by_evidence.get(v.evidence_id)
-        if not c or not e or e.candidate_id != c.id or e.kind == "search":
-            continue
-        if directory_text(e.text):
-            continue
-        quote = normalize_text(v.quote)
-        if len(quote) < 16 or quote not in normalize_text(e.text) or not has_inn(quote, inn):
-            continue
-        if excluded(e.url) or site_domain(e.url) != c.domain:
+        c = by_candidate.get(v.candidate_id)
+        if not ownership_evidence(inn, v, candidates, evidence):
+            unsupported_main |= v.main_site
             continue
         owners.add(c.domain)
         if v.main_site:
             accepted.add(c.domain)
-    # Широта услуг не устанавливает главный бренд многобрендового юрлица.
-    # В прототипе для нескольких доказанных собственных доменов нужен отказ.
-    if len(owners) > 1:
+    if accepted and review.primary_basis == "uncertain":
         return None, "ambiguous"
+    if len(owners) > 1:
+        compared = set()
+        for item in review.comparison_sources:
+            source = by_evidence.get(item.evidence_id)
+            candidate = by_candidate.get(source.candidate_id) if source else None
+            quote = normalize_text(item.quote)
+            if (
+                source
+                and candidate
+                and source.kind != "search"
+                and candidate.domain in owners
+                and site_domain(source.url) == candidate.domain
+                and len(quote) >= 16
+                and quote in normalize_text(source.text)
+            ):
+                compared.add(candidate.domain)
+        if review.primary_basis != "hierarchy":
+            return None, "ambiguous"
+        if not owners.issubset(compared):
+            return None, "invalid_model_evidence"
     if len(accepted) == 1:
         return accepted.pop(), "found"
+    if unsupported_main:
+        return None, "invalid_model_evidence"
     return None, "ambiguous" if accepted else "insufficient_evidence"
 
 
 def verified_name(name: str | None, evidence: list[Evidence], inn: str) -> str | None:
     if not name:
         return None
-    plain = re.sub(r"^(ООО|ПАО|АО|ОАО|ЗАО|ИП)\s+", "", normalize_text(name), flags=re.I)
+    plain = normalize_text(name)
+    form, _, tail = plain.partition(" ")
+    if form.upper() in {"ООО", "ПАО", "АО", "ОАО", "ЗАО", "ИП"}:
+        plain = tail
     plain = plain.translate(str.maketrans("", "", '«»"')).strip()
     if len(plain) < 3:
         return None

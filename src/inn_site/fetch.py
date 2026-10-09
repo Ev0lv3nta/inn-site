@@ -1,29 +1,25 @@
 import asyncio
 import io
-import re
+import json
 from dataclasses import dataclass, field
 from urllib.parse import urljoin, urlsplit
 from urllib.robotparser import RobotFileParser
 
 import httpx
 from bs4 import BeautifulSoup
+from markdown_it import MarkdownIt
 from pypdf import PdfReader
 from pypdf.errors import PdfReadError
 
 from inn_site.rules import (
     excluded,
     host_of,
+    inn_positions,
     normalize_text,
     public_url,
     site_domain,
 )
 from inn_site.search import Cache, ProviderError, Search, parse_hits
-
-LINK_WORDS = re.compile(
-    r"контакт|реквизит|оферт|политик|о компани|о нас|правов|сведения|"
-    r"соглашен|условия|contact|requisit|legal|privacy|offer|about|terms",
-    re.I,
-)
 
 
 @dataclass
@@ -34,58 +30,80 @@ class Page:
     links: list[str]
     hints: list[str] = field(default_factory=list)
     cache_hit: bool = False
+    link_labels: dict[str, str] = field(default_factory=dict)
 
 
 class UnsafeURL(ValueError):
     pass
 
 
-def legal_priority(label: str) -> int:
-    if re.search(r"реквизит|оферт|requisit|legal|offer|terms", label, re.I):
-        return 0
-    return 1 if re.search(r"контакт|contact|политик|privacy", label, re.I) else 2
-
-
 def website_hints(body: str, url: str) -> list[str]:
-    """Ссылка «сайт компании» в карточке — подсказка для проверки, не доказательство."""
+    """Внешние ссылки страницы. Их смысл и принадлежность определяет LLM."""
     soup = BeautifulSoup(body, "html.parser")
     hints = []
-    for a in soup.find_all("a", href=True):
+    for a in soup.find_all(["a", "link"], href=True):
+        if a.name == "link" and "canonical" not in a.get("rel", []):
+            continue
         target = urljoin(url, a["href"]).split("#")[0]
-        label = a.get_text(" ", strip=True)
-        nearby = a.parent.get_text(" ", strip=True)[:500]
         try:
             if (
                 site_domain(target) != site_domain(url)
                 and not excluded(target)
-                and (re.search(r"сайт|website", nearby, re.I) or host_of(target) in label.lower())
                 and target not in hints
             ):
                 hints.append(target)
         except ValueError:
             continue
-    return hints[:3]
+    return list(dict.fromkeys(hints[:8] + hints[-16:]))
 
 
-def html_content(body: str, url: str) -> tuple[str, list[str]]:
+def html_content(body: str, url: str) -> tuple[str, list[str], dict[str, str]]:
     soup = BeautifulSoup(body, "html.parser")
     links = []
-    priorities = {}
-    for a in soup.find_all("a", href=True):
+    labels = {}
+    for a in soup.find_all(["a", "link"], href=True):
+        if a.name == "link" and "canonical" not in a.get("rel", []):
+            continue
         target = urljoin(url, a["href"]).split("#")[0]
-        if LINK_WORDS.search(a.get_text(" ", strip=True) + " " + a["href"]):
-            try:
-                if site_domain(target) == site_domain(url) and target not in links:
-                    links.append(target)
-                    label = a.get_text(" ", strip=True) + " " + a["href"]
-                    priorities[target] = legal_priority(label)
-            except ValueError:
-                pass
+        try:
+            host_of(target)
+            labels[target] = (
+                "Каноническая ссылка страницы"
+                if a.name == "link"
+                else a.get_text(" ", strip=True)[:120]
+            )
+            if site_domain(target) == site_domain(url) and target not in links:
+                links.append(target)
+        except ValueError:
+            continue
+    structured_text = []
+    for tag in soup.find_all("script", type=["application/json", "application/ld+json"]):
+        try:
+            pending = [json.loads(tag.string or tag.get_text())]
+            while pending:
+                value = pending.pop()
+                if isinstance(value, dict):
+                    pending.extend(reversed(list(value.values())))
+                elif isinstance(value, list):
+                    pending.extend(reversed(value))
+                elif isinstance(value, str):
+                    structured_text.append(
+                        BeautifulSoup(value, "html.parser").get_text(" ", strip=True)
+                        if "<" in value
+                        else value
+                    )
+                elif isinstance(value, (int, float)) and not isinstance(value, bool):
+                    structured_text.append(str(value))
+        except (ValueError, TypeError, RecursionError):
+            continue
     for tag in soup(["script", "style", "noscript", "svg", "template"]):
         tag.decompose()
-    return normalize_text(soup.get_text(" ", strip=True)), sorted(
-        links, key=lambda u: priorities[u]
-    )[:12]
+    # Меню и футер сохраняются по позиции в документе, без словарей ключевых слов.
+    return (
+        normalize_text(soup.get_text(" ", strip=True) + " " + " ".join(structured_text)),
+        links[:500],
+        labels,
+    )
 
 
 def excerpts(text: str, inn: str, limit: int = 8500) -> str:
@@ -95,12 +113,12 @@ def excerpts(text: str, inn: str, limit: int = 8500) -> str:
         return text
     edge = min(700, limit // 5)
     chunks = [text[:edge]]
-    matches = list(re.finditer(rf"(?<!\d){inn}(?!\d)", text))
+    matches = inn_positions(text, inn)
     selected = [matches[0], matches[-1]] if len(matches) > 1 else matches
     room = max(0, limit - 2 * edge - 130)
     window = room // max(1, len(selected))
     for match in selected:
-        start = max(0, min(match.start() - window // 2, len(text) - window))
+        start = max(0, min(match - window // 2, len(text) - window))
         chunks.append(text[start : start + window])
     chunks.append(text[-edge:])
     return "\n[... фрагмент пропущен ...]\n".join(dict.fromkeys(chunks))[:limit]
@@ -109,9 +127,10 @@ def excerpts(text: str, inn: str, limit: int = 8500) -> str:
 def inn_quote(text: str, inn: str) -> str:
     for fragment in text.split("[... фрагмент пропущен ...]"):
         fragment = normalize_text(fragment)
-        match = re.search(rf"(?<!\d){inn}(?!\d)", fragment)
-        if match:
-            return fragment[max(0, match.start() - 160) : match.end() + 200].strip()
+        matches = inn_positions(fragment, inn)
+        if matches:
+            pos = matches[0]
+            return fragment[max(0, pos - 160) : pos + len(inn) + 200].strip()
     return ""
 
 
@@ -187,12 +206,12 @@ class Fetcher:
                 if "pdf" in content_type or body.startswith(b"%PDF-"):
                     reader = PdfReader(io.BytesIO(body))
                     text = "\n".join((p.extract_text() or "") for p in list(reader.pages)[:12])
-                    kind, links, hints = "pdf", [], []
+                    kind, links, hints, labels = "pdf", [], [], {}
                 elif "html" in content_type or body.lstrip().startswith(b"<"):
                     # HTTPX учитывает charset заголовка; meta charset читается BeautifulSoup.
                     encoding = BeautifulSoup(body, "html.parser").original_encoding or "utf-8"
                     html = body.decode(encoding, errors="replace")
-                    text, links = html_content(html, final_url)
+                    text, links, labels = html_content(html, final_url)
                     hints = website_hints(html, final_url)
                     kind = "html"
                 else:
@@ -200,7 +219,14 @@ class Fetcher:
                     return None
                 if len(text) < 60:
                     raise ValueError("Пустой текст страницы")
-                obj = {"url": final_url, "text": text, "kind": kind, "links": links, "hints": hints}
+                obj = {
+                    "url": final_url,
+                    "text": text,
+                    "kind": kind,
+                    "links": links,
+                    "hints": hints,
+                    "link_labels": {u: labels.get(u, "") for u in links + hints},
+                }
                 self.cache.put("page:" + url, obj)
                 op["kind"] = kind
                 return Page(**obj)
@@ -209,11 +235,38 @@ class Fetcher:
                 return None
             except (httpx.HTTPError, ValueError, OSError, TimeoutError, PdfReadError) as e:
                 op["error"] = type(e).__name__
+                if isinstance(e, httpx.HTTPStatusError):
+                    op["http_status"] = e.response.status_code
             # Не передаём локальные адреса удалённому сервису даже при сбое DNS.
             try:
                 await self._safe_url(url)
                 if self.remote_fallback and await self._allowed(url):
                     raw = await self.search.fetch_remote(url)
+                    if isinstance(raw, dict):
+                        remote_url = raw["url"]
+                        if host_of(remote_url) != host_of(url):
+                            return None
+                        await self._safe_url(remote_url)
+                        if raw.get("html"):
+                            text, links, labels = html_content(raw["html"], remote_url)
+                            hints = website_hints(raw["html"], remote_url)
+                        else:
+                            text, links, labels = html_content(
+                                MarkdownIt().render(raw["text"]), remote_url
+                            )
+                            hints = []
+                        op["kind"] = "remote"
+                        op["renderer"] = raw.get("metadata", {}).get("renderedWith")
+                        if len(text) > 60:
+                            return Page(
+                                remote_url,
+                                text,
+                                "remote",
+                                links,
+                                hints,
+                                link_labels={u: labels.get(u, "") for u in links + hints},
+                            )
+                        return None
                     hits = parse_hits(raw)
                     own = [h for h in hits if host_of(h.url) == host_of(url)]
                     text = own[0].text if own else ""
@@ -222,23 +275,14 @@ class Fetcher:
                         await self._safe_url(remote_url)
                         if not await self._allowed(remote_url):
                             return None
-                        links = []
-                        for label, target in re.findall(
-                            r"\[([^\]]+)\]\((https?://[^\s)]+)\)", text
-                        ):
-                            try:
-                                if site_domain(target) == site_domain(url) and LINK_WORDS.search(
-                                    label + target
-                                ):
-                                    links.append((legal_priority(label + target), target))
-                            except ValueError:
-                                continue
+                        _, links, labels = html_content(MarkdownIt().render(text), remote_url)
                         op["kind"] = "remote"
                         return Page(
                             remote_url,
                             normalize_text(text),
                             "remote",
-                            list(dict.fromkeys(u for _, u in sorted(links)))[:12],
+                            links,
+                            link_labels={u: labels.get(u, "") for u in links},
                         )
             except (ProviderError, httpx.HTTPError, ValueError, OSError, TimeoutError) as e:
                 op["fallback_error"] = type(e).__name__

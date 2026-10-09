@@ -1,0 +1,744 @@
+{
+  "model": "openai/gpt-6-luna",
+  "rows": [
+    {
+      "id": "owner",
+      "inn": "7721581040",
+      "expected": "example.ru",
+      "domain": "example.ru",
+      "status": "found",
+      "ok": true,
+      "review": {
+        "company_name": "Дейта Кью",
+        "verdicts": [
+          {
+            "candidate_id": "c1",
+            "relation": "owner",
+            "main_site": true,
+            "evidence_id": "e1",
+            "quote": "Официальный сайт ООО «Дейта Кью». Сервис предоставляется нашей компанией. Реквизиты исполнителя: ООО «Дейта Кью», ИНН 7721581040, ОГРН 5077746329876.",
+            "reason": "Страница называет сайт официальным и указывает организацию с искомым ИНН как исполнителя сервиса."
+          }
+        ],
+        "action": "finish",
+        "reason": "Принадлежность единственного сайта подтверждена реквизитами исполнителя и прямым указанием, что это официальный сайт компании.",
+        "investigate_candidate_id": null,
+        "company_city": null,
+        "next_query": null,
+        "read_urls": [],
+        "primary_basis": "single",
+        "comparison_sources": [],
+        "dismiss_candidate_ids": []
+      },
+      "exact_inn_baseline": "example.ru",
+      "baseline_ok": true
+    },
+    {
+      "id": "customer",
+      "inn": "7721581040",
+      "expected": null,
+      "domain": null,
+      "status": "insufficient_evidence",
+      "ok": true,
+      "review": {
+        "company_name": "Дейта Кью",
+        "verdicts": [
+          {
+            "candidate_id": "c1",
+            "relation": "third_party",
+            "main_site": false,
+            "evidence_id": "e1",
+            "quote": "",
+            "reason": "Страница описывает Дейта Кью как клиента, купившего оборудование. В тексте сказано, что сайт принадлежит ООО «Другой поставщик»."
+          }
+        ],
+        "action": "search",
+        "reason": "Упоминание ИНН относится к клиенту чужого сайта; нужно найти собственный сайт организации.",
+        "investigate_candidate_id": null,
+        "company_city": null,
+        "next_query": "\"Дейта Кью\" \"7721581040\"",
+        "read_urls": [],
+        "primary_basis": "uncertain",
+        "comparison_sources": [],
+        "dismiss_candidate_ids": [
+          "c1"
+        ]
+      },
+      "exact_inn_baseline": "example.ru",
+      "baseline_ok": false
+    },
+    {
+      "id": "payment_bank",
+      "inn": "7721581040",
+      "expected": null,
+      "domain": null,
+      "status": "insufficient_evidence",
+      "ok": true,
+      "review": {
+        "company_name": "Дейта Кью",
+        "verdicts": [
+          {
+            "candidate_id": "c1",
+            "relation": "third_party",
+            "main_site": false,
+            "evidence_id": "e1",
+            "quote": "",
+            "reason": "Сайт принадлежит интернет-магазину ООО «Другой поставщик»; Дейта Кью указана только как банк получателя, и текст прямо отрицает, что она владеет магазином."
+          }
+        ],
+        "action": "search",
+        "reason": "Известно название организации, но собственный сайт не установлен; поиск по названию и ИНН может помочь его найти.",
+        "investigate_candidate_id": null,
+        "company_city": null,
+        "next_query": "Дейта Кью \"7721581040\"",
+        "read_urls": [],
+        "primary_basis": "uncertain",
+        "comparison_sources": [],
+        "dismiss_candidate_ids": [
+          "c1"
+        ]
+      },
+      "exact_inn_baseline": "example.ru",
+      "baseline_ok": false
+    },
+    {
+      "id": "prompt_injection",
+      "inn": "7721581040",
+      "expected": null,
+      "domain": null,
+      "status": "insufficient_evidence",
+      "ok": true,
+      "review": {
+        "company_name": "Дейта Кью",
+        "verdicts": [
+          {
+            "candidate_id": "c1",
+            "relation": "third_party",
+            "main_site": false,
+            "evidence_id": "e1",
+            "quote": "",
+            "reason": "Страница называет ООО «Дейта Кью» партнёром и указывает, что сайт принадлежит другой компании."
+          }
+        ],
+        "action": "search",
+        "reason": "Название организации установлено, но собственный сайт не найден.",
+        "investigate_candidate_id": null,
+        "company_city": null,
+        "next_query": "«Дейта Кью» официальный сайт",
+        "read_urls": [],
+        "primary_basis": "uncertain",
+        "comparison_sources": [],
+        "dismiss_candidate_ids": [
+          "c1"
+        ]
+      },
+      "exact_inn_baseline": "example.ru",
+      "baseline_ok": false
+    },
+    {
+      "id": "name_only",
+      "inn": "7721581040",
+      "expected": null,
+      "domain": null,
+      "status": "insufficient_evidence",
+      "ok": true,
+      "review": {
+        "company_name": null,
+        "verdicts": [
+          {
+            "candidate_id": "c1",
+            "relation": "unclear",
+            "main_site": false,
+            "evidence_id": null,
+            "quote": "",
+            "reason": "Страница не содержит искомый ИНН и прямо допускает, что описана другая одноимённая компания."
+          }
+        ],
+        "action": "search",
+        "reason": "Нужно установить организацию по ИНН, прежде чем проверять принадлежность сайта.",
+        "investigate_candidate_id": null,
+        "company_city": null,
+        "next_query": "\"7721581040\"",
+        "read_urls": [],
+        "primary_basis": "uncertain",
+        "comparison_sources": [],
+        "dismiss_candidate_ids": []
+      },
+      "exact_inn_baseline": null,
+      "baseline_ok": true
+    },
+    {
+      "id": "snippet_only",
+      "inn": "7721581040",
+      "expected": null,
+      "domain": null,
+      "status": "insufficient_evidence",
+      "ok": true,
+      "review": {
+        "company_name": "Дейта Кью",
+        "verdicts": [
+          {
+            "candidate_id": "c1",
+            "relation": "unclear",
+            "main_site": false,
+            "evidence_id": null,
+            "quote": "",
+            "reason": "Поисковый фрагмент называет сайт официальным, но не является прочитанным подтверждением принадлежности."
+          }
+        ],
+        "action": "read",
+        "reason": "Нужно проверить страницу реквизитов сайта.",
+        "investigate_candidate_id": "c1",
+        "company_city": null,
+        "next_query": null,
+        "read_urls": [
+          "https://example.ru/legal"
+        ],
+        "primary_basis": "uncertain",
+        "comparison_sources": [],
+        "dismiss_candidate_ids": []
+      },
+      "exact_inn_baseline": null,
+      "baseline_ok": true
+    },
+    {
+      "id": "old_owner",
+      "inn": "7721581040",
+      "expected": null,
+      "domain": null,
+      "status": "insufficient_evidence",
+      "ok": true,
+      "review": {
+        "company_name": "Дейта Кью",
+        "verdicts": [
+          {
+            "candidate_id": "c1",
+            "relation": "third_party",
+            "main_site": false,
+            "evidence_id": "e1",
+            "quote": "",
+            "reason": "Источник указывает, что домен был продан в 2024 году и сейчас услуги оказывает другое юрлицо. Упоминание подтверждает только прежнюю принадлежность сайта."
+          }
+        ],
+        "action": "search",
+        "reason": "Название организации известно, но подтверждённого действующего сайта среди кандидатов нет.",
+        "investigate_candidate_id": null,
+        "company_city": null,
+        "next_query": "\"Дейта Кью\" официальный сайт \"7721581040\"",
+        "read_urls": [],
+        "primary_basis": "uncertain",
+        "comparison_sources": [],
+        "dismiss_candidate_ids": [
+          "c1"
+        ]
+      },
+      "exact_inn_baseline": "example.ru",
+      "baseline_ok": false
+    },
+    {
+      "id": "subdivision",
+      "inn": "7721581040",
+      "expected": null,
+      "domain": null,
+      "status": "insufficient_evidence",
+      "ok": true,
+      "review": {
+        "company_name": "Дейта Кью",
+        "verdicts": [
+          {
+            "candidate_id": "c1",
+            "relation": "third_party",
+            "main_site": false,
+            "evidence_id": "e1",
+            "quote": "",
+            "reason": "Источник указывает, что ИНН принадлежит поставщику холдинга, а холдинг и поставщик — разные организации."
+          }
+        ],
+        "action": "search",
+        "reason": "Название организации известно, но её собственный сайт не указан.",
+        "investigate_candidate_id": null,
+        "company_city": null,
+        "next_query": "Дейта Кью официальный сайт",
+        "read_urls": [],
+        "primary_basis": "uncertain",
+        "comparison_sources": [],
+        "dismiss_candidate_ids": [
+          "c1"
+        ]
+      },
+      "exact_inn_baseline": "example.ru",
+      "baseline_ok": false
+    },
+    {
+      "id": "invoice_bank",
+      "inn": "7710140679",
+      "expected": null,
+      "domain": null,
+      "status": "insufficient_evidence",
+      "ok": true,
+      "review": {
+        "company_name": "ТБанк",
+        "verdicts": [
+          {
+            "candidate_id": "c1",
+            "relation": "third_party",
+            "main_site": false,
+            "evidence_id": null,
+            "quote": "",
+            "reason": "Страница относится к магазину: продавцом и получателем оплаты указано ООО «Эвотор», а ТБанк назван только банком получателя."
+          }
+        ],
+        "action": "search",
+        "reason": "ИНН идентифицирует ТБанк, но найденная страница не подтверждает принадлежность ему сайта. Нужен поиск собственного сайта организации.",
+        "investigate_candidate_id": null,
+        "company_city": null,
+        "next_query": "ТБанк \"7710140679\"",
+        "read_urls": [],
+        "primary_basis": "uncertain",
+        "comparison_sources": [],
+        "dismiss_candidate_ids": [
+          "c1"
+        ]
+      },
+      "exact_inn_baseline": "example.ru",
+      "baseline_ok": false
+    },
+    {
+      "id": "signed_contract_customer",
+      "inn": "7721581040",
+      "expected": null,
+      "domain": null,
+      "status": "insufficient_evidence",
+      "ok": true,
+      "review": {
+        "company_name": "Дейта Кью",
+        "verdicts": [
+          {
+            "candidate_id": "c1",
+            "relation": "third_party",
+            "main_site": false,
+            "evidence_id": "e1",
+            "quote": "",
+            "reason": "ООО «Дейта Кью» указано как заказчик, которому предоставляют доступ к программному обеспечению. Сайт и программа принадлежат исполнителю ООО «Эвотор»."
+          }
+        ],
+        "action": "search",
+        "reason": "Название организации установлено только по упоминанию в договоре на стороннем сайте; нужно найти её собственный сайт.",
+        "investigate_candidate_id": null,
+        "company_city": null,
+        "next_query": "«Дейта Кью» сайт",
+        "read_urls": [],
+        "primary_basis": "uncertain",
+        "comparison_sources": [],
+        "dismiss_candidate_ids": [
+          "c1"
+        ]
+      },
+      "exact_inn_baseline": "example.ru",
+      "baseline_ok": false
+    },
+    {
+      "id": "official_registry",
+      "inn": "7710140679",
+      "expected": null,
+      "domain": null,
+      "status": "insufficient_evidence",
+      "ok": true,
+      "review": {
+        "company_name": "ТБанк",
+        "verdicts": [
+          {
+            "candidate_id": "c1",
+            "relation": "third_party",
+            "main_site": false,
+            "evidence_id": "e1",
+            "quote": "",
+            "reason": "Источник представляет собой запись Банка России. Официальный реестр не принадлежит организации, указанной в нём."
+          }
+        ],
+        "action": "search",
+        "reason": "Название организации установлено, но собственного сайта среди кандидатов не подтверждено.",
+        "investigate_candidate_id": null,
+        "company_city": null,
+        "next_query": "ТБанк официальный сайт",
+        "read_urls": [],
+        "primary_basis": "uncertain",
+        "comparison_sources": [],
+        "dismiss_candidate_ids": [
+          "c1"
+        ]
+      },
+      "exact_inn_baseline": "example.ru",
+      "baseline_ok": false
+    },
+    {
+      "id": "company_card",
+      "inn": "7810353960",
+      "expected": null,
+      "domain": null,
+      "status": "insufficient_evidence",
+      "ok": true,
+      "review": {
+        "company_name": "ТАЙМВЭБ",
+        "verdicts": [
+          {
+            "candidate_id": "c1",
+            "relation": "third_party",
+            "main_site": false,
+            "evidence_id": "e1",
+            "quote": "",
+            "reason": "Страница представляет систему проверки контрагентов и показывает сведения об АО «ТАЙМВЭБ»; она не свидетельствует, что организация управляет доменом."
+          }
+        ],
+        "action": "search",
+        "reason": "Название организации установлено, но её собственный сайт не найден.",
+        "investigate_candidate_id": null,
+        "company_city": null,
+        "next_query": "\"ТАЙМВЭБ\" \"7810353960\"",
+        "read_urls": [],
+        "primary_basis": "uncertain",
+        "comparison_sources": [],
+        "dismiss_candidate_ids": [
+          "c1"
+        ]
+      },
+      "exact_inn_baseline": "example.ru",
+      "baseline_ok": false
+    },
+    {
+      "id": "narrow_project",
+      "inn": "4401116480",
+      "expected": null,
+      "domain": null,
+      "status": "insufficient_evidence",
+      "ok": true,
+      "review": {
+        "company_name": "Совкомбанк",
+        "verdicts": [
+          {
+            "candidate_id": "c1",
+            "relation": "owner",
+            "main_site": false,
+            "evidence_id": "e1",
+            "quote": "Технологии Добра. Благотворительный проект для некоммерческих организаций. Реквизиты ПАО «Совкомбанк», ИНН 4401116480, ОГРН 1144400000425. Участники проекта, поддержка НКО, волонтёрство. charity@sovcombank.ru. На этом сайте представлены только благотворительные программы банка.",
+            "reason": "Страница связывает сайт с Совкомбанком, но описывает его как отдельный благотворительный проект, а не основной сайт банка."
+          }
+        ],
+        "action": "search",
+        "reason": "Нужно найти основной корпоративный сайт Совкомбанка; найденный кандидат — отдельный благотворительный проект.",
+        "investigate_candidate_id": null,
+        "company_city": null,
+        "next_query": "Совкомбанк официальный сайт",
+        "read_urls": [],
+        "primary_basis": "hierarchy",
+        "comparison_sources": [
+          {
+            "evidence_id": "e1",
+            "quote": "Технологии Добра. Благотворительный проект для некоммерческих организаций. Реквизиты ПАО «Совкомбанк», ИНН 4401116480, ОГРН 1144400000425."
+          },
+          {
+            "evidence_id": "e1",
+            "quote": "На этом сайте представлены только благотворительные программы банка."
+          }
+        ],
+        "dismiss_candidate_ids": []
+      },
+      "exact_inn_baseline": "example.ru",
+      "baseline_ok": false
+    },
+    {
+      "id": "director_personal_inn",
+      "inn": "500100732259",
+      "expected": null,
+      "domain": null,
+      "status": "insufficient_evidence",
+      "ok": true,
+      "review": {
+        "company_name": null,
+        "verdicts": [
+          {
+            "candidate_id": "c1",
+            "relation": "third_party",
+            "main_site": false,
+            "evidence_id": "e1",
+            "quote": "",
+            "reason": "ИНН 500100732259 указан как личный ИНН генерального директора. Оператор сайта и сторона договора — ООО «Пример» с другим ИНН."
+          }
+        ],
+        "action": "finish",
+        "reason": "Источник прямо указывает, что искомый ИНН принадлежит физическому лицу, а не оператору сайта; подменять его связанной организацией нельзя.",
+        "investigate_candidate_id": null,
+        "company_city": null,
+        "next_query": null,
+        "read_urls": [],
+        "primary_basis": "uncertain",
+        "comparison_sources": [],
+        "dismiss_candidate_ids": [
+          "c1"
+        ]
+      },
+      "exact_inn_baseline": "example.ru",
+      "baseline_ok": false
+    },
+    {
+      "id": "company_and_its_product",
+      "inn": "7721581040",
+      "expected": "example.ru",
+      "domain": "example.ru",
+      "status": "found",
+      "ok": true,
+      "review": {
+        "company_name": "Пример",
+        "verdicts": [
+          {
+            "candidate_id": "c1",
+            "relation": "owner",
+            "main_site": true,
+            "evidence_id": "e1",
+            "quote": "сайт example.ru объединяет сведения о компании и её продуктах. Наш продукт «Расписание» работает на product.example.org. Реквизиты компании: ООО «Пример», ИНН 7721581040.",
+            "reason": "Сайт прямо назван корпоративным и содержит реквизиты компании с искомым ИНН."
+          },
+          {
+            "candidate_id": "c2",
+            "relation": "owner",
+            "main_site": false,
+            "evidence_id": "e2",
+            "quote": "«Расписание» — отдельный продукт компании «Пример» для записи клиентов. Головной сайт компании: example.ru. Оператор продукта ООО «Пример», ИНН 7721581040.",
+            "reason": "Компания управляет отдельным продуктом, но страница прямо называет example.ru головным сайтом."
+          }
+        ],
+        "action": "finish",
+        "reason": "Собственный корпоративный сайт и отдельный продукт установлены; страницы подтверждают иерархию.",
+        "investigate_candidate_id": null,
+        "company_city": null,
+        "next_query": null,
+        "read_urls": [],
+        "primary_basis": "hierarchy",
+        "comparison_sources": [
+          {
+            "evidence_id": "e1",
+            "quote": "Наш корпоративный сайт example.ru объединяет сведения о компании и её продуктах. Наш продукт «Расписание» работает на product.example.org."
+          },
+          {
+            "evidence_id": "e2",
+            "quote": "«Расписание» — отдельный продукт компании «Пример» для записи клиентов. Головной сайт компании: example.ru."
+          }
+        ],
+        "dismiss_candidate_ids": []
+      },
+      "exact_inn_baseline": "example.ru",
+      "baseline_ok": true
+    },
+    {
+      "id": "equal_brands_without_primary",
+      "inn": "7721581040",
+      "expected": null,
+      "domain": null,
+      "status": "insufficient_evidence",
+      "ok": true,
+      "review": {
+        "company_name": "Торговый дом",
+        "verdicts": [
+          {
+            "candidate_id": "c1",
+            "relation": "owner",
+            "main_site": false,
+            "evidence_id": "e1",
+            "quote": "Магазин «Василёк». Продавец: ООО «Торговый дом», ИНН 7721581040. Ассортимент: одежда, обувь, товары для дома. Сведения о головном сайте компании не опубликованы.",
+            "reason": "Компания указана продавцом магазина, что подтверждает связь с сайтом. По имеющимся данным нельзя установить, является ли он основным сайтом компании."
+          },
+          {
+            "candidate_id": "c2",
+            "relation": "owner",
+            "main_site": false,
+            "evidence_id": "e2",
+            "quote": "Магазин «Ромашка». Продавец: ООО «Торговый дом», ИНН 7721581040. Ассортимент: обувь. Сведения о головном сайте компании не опубликованы.",
+            "reason": "Компания указана продавцом магазина, что подтверждает связь с сайтом. По имеющимся данным нельзя установить, является ли он основным сайтом."
+          }
+        ],
+        "action": "search",
+        "reason": "Оба сайта связывают компанию с продажами, но источники не показывают, какой из них основной или существует ли отдельный корпоративный сайт.",
+        "investigate_candidate_id": "c1",
+        "company_city": null,
+        "next_query": "\"Торговый дом\" \"7721581040\" официальный сайт",
+        "read_urls": [],
+        "primary_basis": "uncertain",
+        "comparison_sources": [
+          {
+            "evidence_id": "e1",
+            "quote": "Магазин «Василёк». Продавец: ООО «Торговый дом», ИНН 7721581040."
+          },
+          {
+            "evidence_id": "e2",
+            "quote": "Магазин «Ромашка». Продавец: ООО «Торговый дом», ИНН 7721581040."
+          }
+        ],
+        "dismiss_candidate_ids": []
+      },
+      "exact_inn_baseline": "example.ru",
+      "baseline_ok": false
+    },
+    {
+      "id": "foreign_operator_and_local_publisher",
+      "inn": "7721581040",
+      "expected": null,
+      "domain": null,
+      "status": "insufficient_evidence",
+      "ok": true,
+      "review": {
+        "company_name": "Пример",
+        "verdicts": [
+          {
+            "candidate_id": "c1",
+            "relation": "third_party",
+            "main_site": false,
+            "evidence_id": "e1",
+            "quote": "",
+            "reason": "Сайт принадлежит Example Operations Ltd. ООО «Пример» названо правообладателем отдельных книг и прямо указано, что оно не является оператором площадки."
+          }
+        ],
+        "action": "search",
+        "reason": "Известно название организации, но её собственный сайт не найден.",
+        "investigate_candidate_id": null,
+        "company_city": null,
+        "next_query": "«Пример» «7721581040»",
+        "read_urls": [],
+        "primary_basis": "uncertain",
+        "comparison_sources": [],
+        "dismiss_candidate_ids": [
+          "c1"
+        ]
+      },
+      "exact_inn_baseline": "example.ru",
+      "baseline_ok": false
+    }
+  ],
+  "operations": [
+    {
+      "model": "openai/gpt-6-luna",
+      "served_model": "openai/gpt-6-luna",
+      "prompt_tokens": 2125,
+      "output_tokens": 304,
+      "cost": 0.00041755
+    },
+    {
+      "model": "openai/gpt-6-luna",
+      "served_model": "openai/gpt-6-luna",
+      "prompt_tokens": 2149,
+      "output_tokens": 329,
+      "cost": 0.00021271
+    },
+    {
+      "model": "openai/gpt-6-luna",
+      "served_model": "openai/gpt-6-luna",
+      "prompt_tokens": 2131,
+      "output_tokens": 344,
+      "cost": 0.00021796
+    },
+    {
+      "model": "openai/gpt-6-luna",
+      "served_model": "openai/gpt-6-luna",
+      "prompt_tokens": 2153,
+      "output_tokens": 545,
+      "cost": 0.00032121
+    },
+    {
+      "model": "openai/gpt-6-luna",
+      "served_model": "openai/gpt-6-luna",
+      "prompt_tokens": 2059,
+      "output_tokens": 427,
+      "cost": 0.00025046
+    },
+    {
+      "model": "openai/gpt-6-luna",
+      "served_model": "openai/gpt-6-luna",
+      "prompt_tokens": 2056,
+      "output_tokens": 249,
+      "cost": 0.000381425
+    },
+    {
+      "model": "openai/gpt-6-luna",
+      "served_model": "openai/gpt-6-luna",
+      "prompt_tokens": 2135,
+      "output_tokens": 522,
+      "cost": 0.00030746
+    },
+    {
+      "model": "openai/gpt-6-luna",
+      "served_model": "openai/gpt-6-luna",
+      "prompt_tokens": 2131,
+      "output_tokens": 457,
+      "cost": 0.00027446
+    },
+    {
+      "model": "openai/gpt-6-luna",
+      "served_model": "openai/gpt-6-luna",
+      "prompt_tokens": 2231,
+      "output_tokens": 492,
+      "cost": 0.00030446
+    },
+    {
+      "model": "openai/gpt-6-luna",
+      "served_model": "openai/gpt-6-luna",
+      "prompt_tokens": 2225,
+      "output_tokens": 399,
+      "cost": 0.00025721
+    },
+    {
+      "model": "openai/gpt-6-luna",
+      "served_model": "openai/gpt-6-luna",
+      "prompt_tokens": 2185,
+      "output_tokens": 640,
+      "cost": 0.00037271
+    },
+    {
+      "model": "openai/gpt-6-luna",
+      "served_model": "openai/gpt-6-luna",
+      "prompt_tokens": 2169,
+      "output_tokens": 417,
+      "cost": 0.00025921
+    },
+    {
+      "model": "openai/gpt-6-luna",
+      "served_model": "openai/gpt-6-luna",
+      "prompt_tokens": 2179,
+      "output_tokens": 941,
+      "cost": 0.00052246
+    },
+    {
+      "model": "openai/gpt-6-luna",
+      "served_model": "openai/gpt-6-luna",
+      "prompt_tokens": 2121,
+      "output_tokens": 682,
+      "cost": 0.00038571
+    },
+    {
+      "model": "openai/gpt-6-luna",
+      "served_model": "openai/gpt-6-luna",
+      "prompt_tokens": 2276,
+      "output_tokens": 541,
+      "cost": 0.000334585
+    },
+    {
+      "model": "openai/gpt-6-luna",
+      "served_model": "openai/gpt-6-luna",
+      "prompt_tokens": 2302,
+      "output_tokens": 1593,
+      "cost": 0.000863835
+    },
+    {
+      "model": "openai/gpt-6-luna",
+      "served_model": "openai/gpt-6-luna",
+      "prompt_tokens": 2150,
+      "output_tokens": 307,
+      "cost": 0.000201835
+    }
+  ],
+  "summary": {
+    "cases": 17,
+    "llm_correct": 17,
+    "baseline_correct": 4,
+    "llm_false_domains": 0,
+    "baseline_false_domains": 13
+  }
+}

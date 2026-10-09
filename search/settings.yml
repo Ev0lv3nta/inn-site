@@ -3,9 +3,12 @@ use_default_settings:
     keep_only:
       - google cse
       - duckduckgo
-      - yahoo
+      - bing
+      - brave
 engines:
-  - name: yahoo
+  - name: bing
+    disabled: false
+  - name: brave
     disabled: false
 server:
   secret_key: "inn-site-search-local-demo-6b8d47c2"

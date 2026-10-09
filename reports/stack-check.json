@@ -1,0 +1,26 @@
+{
+  "platform": "Linux x86_64",
+  "crw": "0.35.1",
+  "searxng_commit": "f4822b3fc46726bb259d14c6332b702c76b98f82",
+  "gunicorn": "26.2.0",
+  "node": "24.21.0",
+  "playwright": "1.64.0",
+  "chromium": "156.0.8078.4",
+  "lightpanda": "1.0.0-nightly.9405+799dc3e06",
+  "checks": {
+    "repository_launcher_started": true,
+    "chrome_rest_scrape": {
+      "success": true,
+      "rendered_with": "chrome",
+      "markdown_chars": 7246
+    },
+    "lightpanda_rest_scrape": {
+      "success": true,
+      "rendered_with": "lightpanda",
+      "markdown_chars": 7246
+    },
+    "owned_processes_remaining_after_sigterm": 0,
+    "tavily_brave_live_calls": 0
+  },
+  "private_server_required": false
+}

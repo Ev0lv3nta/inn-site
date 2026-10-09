@@ -1,0 +1,122 @@
+{
+  "run_at": "2026-10-09T22:10:10.924545+00:00",
+  "python": "3.13.14",
+  "model_info": {
+    "id": "openai/gpt-6-luna",
+    "pricing": {
+      "prompt": "0.0000001",
+      "completion": "0.0000005",
+      "web_search": "0.01",
+      "input_cache_read": "0.00000001",
+      "input_cache_write": "0.000000125",
+      "overrides": [
+        {
+          "min_prompt_tokens": 272000,
+          "prompt": "0.0000002",
+          "completion": "0.00000075",
+          "input_cache_read": "0.00000002",
+          "input_cache_write": "0.00000025"
+        }
+      ]
+    },
+    "context_length": 1050000
+  },
+  "search_provider": "crw",
+  "source_sha256": "86664024a3de0137040451ce413515d1444ad473346198f9fe3b229fd262bf86",
+  "rows": [
+    {
+      "inn": "9701034075",
+      "name": "Пироговая / Русские пироги",
+      "split": "dev",
+      "expected_domains": [
+        "xn--80aebcypygk.xn--p1ai",
+        "glavpirog.ru"
+      ],
+      "gold_source": "https://xn--80aebcypygk.xn--p1ai/contacty/",
+      "note": "Кириллический домен; допустим подтверждённый основной домен или его алиас.",
+      "domain": "xn--80aebcypygk.xn--p1ai",
+      "status": "found",
+      "ok": true,
+      "seconds": 157.93,
+      "search_calls": 4,
+      "read_urls": 11,
+      "cache_hits": 0,
+      "llm_calls": 9,
+      "llm_cost_usd": 0.02169398,
+      "search_failures": 0
+    },
+    {
+      "inn": "7724709637",
+      "name": "Фотоэксперт: несколько брендов",
+      "split": "dev",
+      "expected_domains": [],
+      "gold_source": "https://fotoproekt.ru/requisites",
+      "note": "Неоднозначный основной домен. Фотоэксперт подтверждён на нескольких собственных сайтах; эталон netprint.ru исправлен после аудита первого контрольного прогона.",
+      "additional_gold_sources": [
+        "https://printbook.ru/privacy",
+        "https://partner.netprint.ru/ru/145/2415/"
+      ],
+      "domain": null,
+      "status": "ambiguous",
+      "ok": true,
+      "seconds": 77.96,
+      "search_calls": 4,
+      "read_urls": 6,
+      "cache_hits": 0,
+      "llm_calls": 7,
+      "llm_cost_usd": 0.01124472,
+      "search_failures": 2
+    },
+    {
+      "inn": "7719571260",
+      "name": "ЛитРес",
+      "split": "holdout",
+      "expected_domains": [
+        "litres.ru"
+      ],
+      "gold_source": "https://www.litres.ru/company/contacts/",
+      "note": "Продавец электронных книг; реквизиты на собственном сайте.",
+      "domain": "litres.ru",
+      "status": "found",
+      "ok": true,
+      "seconds": 79.03,
+      "search_calls": 2,
+      "read_urls": 6,
+      "cache_hits": 0,
+      "llm_calls": 5,
+      "llm_cost_usd": 0.02103558,
+      "search_failures": 0
+    },
+    {
+      "inn": "7728551528",
+      "name": "Спортмастер",
+      "split": "holdout",
+      "expected_domains": [
+        "sportmaster.ru"
+      ],
+      "gold_source": "https://www.sportmaster.ru/upload/content/contentgate/prod/ru_sm/dip_content/2026/news/game/28_05/files_game_rules.pdf",
+      "note": "Розничная торговля; оператор собственной программы и магазина в PDF.",
+      "domain": "sportmaster.ru",
+      "status": "found",
+      "ok": true,
+      "seconds": 70.93,
+      "search_calls": 4,
+      "read_urls": 6,
+      "cache_hits": 0,
+      "llm_calls": 8,
+      "llm_cost_usd": 0.01130951,
+      "search_failures": 0
+    }
+  ],
+  "workers": 2,
+  "summary": {
+    "cases": 4,
+    "correct": 4,
+    "returned_domains": 3,
+    "wrong_domains": 0,
+    "precision_on_returned": 1.0,
+    "positive_recall": 1.0,
+    "median_seconds": 78.495,
+    "errors": 0
+  }
+}

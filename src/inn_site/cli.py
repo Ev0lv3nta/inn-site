@@ -14,7 +14,7 @@ def main() -> int:
     parser.add_argument("--inn", help="ИНН; без параметра читается JSON из stdin")
     parser.add_argument("--trace", type=Path, help="Сохранить источники и причины решения")
     parser.add_argument("--no-cache", action="store_true")
-    parser.add_argument("--search", choices=["searx", "ddgs", "exa", "crw"], default="searx")
+    parser.add_argument("--search", choices=["searx", "ddgs", "exa", "crw"], default="crw")
     parser.add_argument("--llm", choices=["openrouter", "ollama"], default="openrouter")
     parser.add_argument("--model")
     args = parser.parse_args()
@@ -40,7 +40,7 @@ def main() -> int:
                     ollama_url=os.getenv("OLLAMA_URL", "http://127.0.0.1:11434"),
                     search_provider=args.search,
                     searx_url=os.getenv("SEARX_URL", "http://127.0.0.1:8888"),
-                    crw_url=os.getenv("CRW_URL"),
+                    crw_url=os.getenv("CRW_URL", "http://127.0.0.1:3080"),
                     budget_file=Path(os.getenv("BUDGET_FILE", ".cache/llm-spend.json")),
                     budget_usd=float(os.getenv("LLM_BUDGET_USD", "0.25")),
                     cache_dir=None

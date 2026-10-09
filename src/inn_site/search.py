@@ -1,7 +1,6 @@
 import asyncio
 import hashlib
 import json
-import re
 import time
 from pathlib import Path
 
@@ -44,7 +43,7 @@ def rpc_result(body: str) -> dict:
         messages = [json.loads(body)]
     except json.JSONDecodeError:
         messages = []
-        for event in re.split(r"\r?\n\r?\n", body):
+        for event in body.replace("\r\n", "\n").split("\n\n"):
             data = "\n".join(
                 line[5:].lstrip() for line in event.splitlines() if line.startswith("data:")
             )
@@ -64,23 +63,37 @@ def rpc_result(body: str) -> dict:
 
 
 def parse_hits(text: str) -> list[SearchHit]:
-    hits = []
-    for block in re.split(r"(?m)^Title:\s*", text)[1:]:
-        match = re.search(r"(?m)^URL:\s*(https?://\S+)", block)
-        if match:
-            title = block.splitlines()[0]
-            body = re.split(
-                r"(?m)^(?:Highlights|Text|Content|Markdown Content):\s*", block, maxsplit=1
-            )
-            hits.append(SearchHit(match[1], title, body[-1].strip()))
-    if not hits:
-        # web_fetch_exa использует заголовок Markdown вместо строки Title.
-        matches = list(re.finditer(r"(?m)^URL:\s*(https?://\S+)", text))
-        for i, match in enumerate(matches):
-            end = matches[i + 1].start() if i + 1 < len(matches) else len(text)
-            title = text[: match.start()].strip().splitlines()[-1].lstrip("# ")
-            hits.append(SearchHit(match[1], title, text[match.end() : end].strip()))
+    hits, title, url, content = [], "", "", []
+    for line in text.splitlines():
+        if line.startswith("Title:"):
+            if url:
+                hits.append(SearchHit(url, title, "\n".join(content).strip()))
+            title, url, content = line[6:].strip(), "", []
+        elif line.startswith("URL:"):
+            if url:
+                hits.append(SearchHit(url, title, "\n".join(content).strip()))
+            value = line[4:].strip().split()
+            url = value[0] if value and value[0].startswith(("http://", "https://")) else ""
+            content = []
+        elif line.startswith(("Highlights:", "Text:", "Content:", "Markdown Content:")):
+            content = [line.split(":", 1)[1].strip()]
+        elif url:
+            content.append(line)
+        elif line.startswith("#"):
+            title = line.lstrip("# ").strip()
+    if url:
+        hits.append(SearchHit(url, title, "\n".join(content).strip()))
     return hits
+
+
+def target_error(text: str) -> bool:
+    marker = "Warning: Target URL returned error "
+    for line in text[:1000].splitlines():
+        if line.startswith(marker):
+            status = line[len(marker) :][:3]
+            if status.isdigit() and 400 <= int(status) < 600:
+                return True
+    return False
 
 
 class Search:
@@ -104,7 +117,7 @@ class Search:
             {"tool": tool, "arguments": arguments, "cache_hit": cached is not None}
         )
         if cached is not None:
-            if re.search(r"Warning: Target URL returned error [45][0-9]{2}", cached[:1000]):
+            if target_error(cached):
                 raise ProviderError("Удалённый кеш содержит ошибку целевой страницы")
             return cached
         try:
@@ -129,7 +142,11 @@ class Search:
         if not text:
             raise ProviderError("Пустой ответ Exa")
         # Ошибки и лимиты провайдера не превращаем в пустую поисковую выдачу.
-        if re.search(r"(?i)rate.limit|quota.exceeded|usage.limit|api.key.required", text[:600]):
+        warning = text[:600].casefold().replace("_", " ").replace("-", " ")
+        if any(
+            s in warning
+            for s in ["rate limit", "quota exceeded", "usage limit", "api key required"]
+        ):
             raise ProviderError("Исчерпан бесплатный лимит Exa")
         self.cache.put(key, text)
         return text
@@ -148,7 +165,7 @@ class Search:
                             "q": query,
                             "format": "json",
                             "language": "ru",
-                            "engines": "google cse,duckduckgo,yahoo",
+                            "engines": "google cse,duckduckgo,bing,brave",
                         },
                         timeout=35,
                     )
@@ -156,11 +173,18 @@ class Search:
                     obj = response.json()
                     data = obj.get("results", [])[:limit]
                     op["unresponsive_engines"] = obj.get("unresponsive_engines", [])
-                    if not data and op["unresponsive_engines"]:
+                    failed = {item[0] for item in op["unresponsive_engines"]}
+                    if not data and {"google cse", "duckduckgo", "bing", "brave"}.issubset(failed):
+                        if self.crw_url:
+                            return await self.crw_search(query, inn, limit, "engines_unavailable")
                         raise ProviderError("Поисковые движки SearXNG недоступны")
                     self.cache.put(key, data)
                 except (httpx.HTTPError, ValueError, TypeError, KeyError, AttributeError) as e:
+                    if self.crw_url:
+                        return await self.crw_search(query, inn, limit, type(e).__name__)
                     raise ProviderError(f"SearXNG недоступен: {type(e).__name__}") from e
+            if not data and self.crw_url:
+                return await self.crw_search(query, inn, limit, "empty_result")
             try:
                 if any(not isinstance(h.get("url"), str) for h in data):
                     raise ValueError("Нет URL результата")
@@ -235,23 +259,46 @@ class Search:
             raise ProviderError("Формат выдачи Exa изменился")
         return hits
 
-    async def fetch_remote(self, url: str) -> str:
+    async def crw_search(self, query: str, inn: str, limit: int, reason: str) -> list[SearchHit]:
+        fallback = Search(self.client, self.cache, "crw", self.crw_url)
+        try:
+            return await fallback.search(query, inn, limit)
+        finally:
+            for operation in fallback.operations:
+                operation["fallback_reason"] = reason
+            self.operations.extend(fallback.operations)
+
+    async def fetch_remote(self, url: str) -> str | dict:
         if self.crw_url:
             self.operations.append({"tool": "crw_scrape", "url": url, "cache_hit": False})
             try:
                 r = await self.client.post(
                     self.crw_url + "/v1/scrape",
-                    json={"url": url, "formats": ["markdown"]},
-                    timeout=35,
+                    json={
+                        "url": url,
+                        "formats": ["markdown", "rawHtml"],
+                        "onlyMainContent": False,
+                        "deadlineMs": 45000,
+                    },
+                    timeout=50,
                 )
                 r.raise_for_status()
                 obj = r.json()
                 if not obj.get("success"):
                     raise ProviderError("CRW не смог прочитать страницу")
-                text = obj.get("data", {}).get("markdown", "")
+                data = obj.get("data", {})
+                metadata = data.get("metadata", {})
+                if int(metadata.get("statusCode", 200)) >= 400:
+                    raise ProviderError("CRW получил ошибку целевой страницы")
+                text = data.get("markdown", "")
                 if not text:
                     raise ProviderError("CRW вернул пустой текст")
-                return f"Title: Страница\nURL: {url}\nContent:\n{text}"
+                return {
+                    "url": metadata.get("sourceURL") or url,
+                    "text": text,
+                    "html": data.get("rawHtml") or "",
+                    "metadata": metadata,
+                }
             except httpx.HTTPError as e:
                 raise ProviderError("CRW не смог прочитать страницу") from e
         if self.provider == "exa":
@@ -261,13 +308,13 @@ class Search:
         cached = self.cache.get(key)
         self.operations.append({"tool": "jina_reader", "url": url, "cache_hit": cached is not None})
         if cached is not None:
-            if re.search(r"Warning: Target URL returned error [45][0-9]{2}", cached[:1000]):
+            if target_error(cached):
                 raise ProviderError("Удалённый кеш содержит ошибку целевой страницы")
             return cached
         try:
             response = await self.client.get("https://r.jina.ai/" + url, timeout=40)
             response.raise_for_status()
-            if re.search(r"Warning: Target URL returned error [45][0-9]{2}", response.text[:1000]):
+            if target_error(response.text):
                 raise ProviderError("Jina Reader получил ошибку целевой страницы")
             raw = response.text.replace("URL Source:", "URL:")
             self.cache.put(key, raw)
