@@ -1,0 +1,79 @@
+{
+  "run_at": "2026-10-09T14:48:18.303349+00:00",
+  "python": "3.13.14",
+  "model_info": {
+    "id": "openai/gpt-6-luna",
+    "pricing": {
+      "prompt": "0.0000001",
+      "completion": "0.0000005",
+      "web_search": "0.01",
+      "input_cache_read": "0.00000001",
+      "input_cache_write": "0.000000125",
+      "overrides": [
+        {
+          "min_prompt_tokens": 272000,
+          "prompt": "0.0000002",
+          "completion": "0.00000075",
+          "input_cache_read": "0.00000002",
+          "input_cache_write": "0.00000025"
+        }
+      ]
+    },
+    "context_length": 1050000
+  },
+  "search_provider": "searx",
+  "source_sha256": "c10ac4245d9c03e93c4b147e9a1ac18060fb43bbca2efa286dfa08a6440a61d5",
+  "rows": [
+    {
+      "inn": "9701034075",
+      "name": "Пироговая / Русские пироги",
+      "split": "dev",
+      "expected_domains": [
+        "xn--80aebcypygk.xn--p1ai",
+        "glavpirog.ru"
+      ],
+      "gold_source": "https://xn--80aebcypygk.xn--p1ai/contacty/",
+      "note": "Кириллический домен; допустим подтверждённый основной домен или его алиас.",
+      "domain": null,
+      "status": "insufficient_evidence",
+      "ok": false,
+      "seconds": 97.54,
+      "search_calls": 3,
+      "read_urls": 12,
+      "cache_hits": 8,
+      "llm_calls": 3,
+      "llm_cost_usd": 0.00600965,
+      "search_failures": 0
+    },
+    {
+      "inn": "7710140679",
+      "name": "ТБанк",
+      "split": "dev",
+      "expected_domains": [
+        "tbank.ru"
+      ],
+      "gold_source": "https://secrets.tbank.ru/cookie-policy/",
+      "note": "У банка есть собственный каталог контрагентов; карточка не доказывает владельца сайта.",
+      "domain": null,
+      "status": "search_error",
+      "ok": false,
+      "seconds": 88.22,
+      "search_calls": 3,
+      "read_urls": 8,
+      "cache_hits": 7,
+      "llm_calls": 3,
+      "llm_cost_usd": 0.00407625,
+      "search_failures": 1
+    }
+  ],
+  "summary": {
+    "cases": 2,
+    "correct": 0,
+    "returned_domains": 0,
+    "wrong_domains": 0,
+    "precision_on_returned": null,
+    "positive_recall": 0.0,
+    "median_seconds": 92.88,
+    "errors": 1
+  }
+}

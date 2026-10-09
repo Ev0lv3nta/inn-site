@@ -1,0 +1,253 @@
+{
+  "run_at": "2026-10-09T14:10:47.226379+00:00",
+  "python": "3.13.14",
+  "model_info": {
+    "id": "openai/gpt-6-luna",
+    "pricing": {
+      "prompt": "0.0000001",
+      "completion": "0.0000005",
+      "web_search": "0.01",
+      "input_cache_read": "0.00000001",
+      "input_cache_write": "0.000000125",
+      "overrides": [
+        {
+          "min_prompt_tokens": 272000,
+          "prompt": "0.0000002",
+          "completion": "0.00000075",
+          "input_cache_read": "0.00000002",
+          "input_cache_write": "0.00000025"
+        }
+      ]
+    },
+    "context_length": 1050000
+  },
+  "search_provider": "searx",
+  "source_sha256": "4f4510452ed155a6bb1f51ba2c06d6165cdab5c80acdceb784d2029d46fc3f0e",
+  "rows": [
+    {
+      "inn": "7721581040",
+      "name": "Дейта Кью / DaData",
+      "split": "dev",
+      "expected_domains": [
+        "dadata.ru"
+      ],
+      "gold_source": "https://dadata.ru/offer/",
+      "note": "Пример из задания; юридическое название отличается от бренда.",
+      "domain": "dadata.ru",
+      "status": "found",
+      "ok": true,
+      "seconds": 6.14,
+      "search_calls": 1,
+      "read_urls": 2,
+      "cache_hits": 0,
+      "llm_calls": 1
+    },
+    {
+      "inn": "9715225506",
+      "name": "Эвотор",
+      "split": "dev",
+      "expected_domains": [
+        "evotor.ru"
+      ],
+      "gold_source": "https://evotor.ru/about-us/",
+      "note": "Реквизиты на странице о компании.",
+      "domain": null,
+      "status": "insufficient_evidence",
+      "ok": false,
+      "seconds": 33.99,
+      "search_calls": 3,
+      "read_urls": 12,
+      "cache_hits": 0,
+      "llm_calls": 3
+    },
+    {
+      "inn": "6663003127",
+      "name": "СКБ Контур",
+      "split": "dev",
+      "expected_domains": [
+        "kontur.ru"
+      ],
+      "gold_source": "https://kontur.ru/class/oferta",
+      "note": "Несколько продуктов и поддоменов.",
+      "domain": "kontur.ru",
+      "status": "found",
+      "ok": true,
+      "seconds": 7.94,
+      "search_calls": 1,
+      "read_urls": 2,
+      "cache_hits": 0,
+      "llm_calls": 1
+    },
+    {
+      "inn": "9724061893",
+      "name": "Ветер Спорт",
+      "split": "dev",
+      "expected_domains": [
+        "veter.cc"
+      ],
+      "gold_source": "https://veter.cc/terms-and-conditions/",
+      "note": "Малый бизнес; ИНН и роль продавца есть в оферте, но не на главной.",
+      "domain": null,
+      "status": "insufficient_evidence",
+      "ok": false,
+      "seconds": 30.52,
+      "search_calls": 3,
+      "read_urls": 11,
+      "cache_hits": 0,
+      "llm_calls": 3
+    },
+    {
+      "inn": "9701034075",
+      "name": "Пироговая / Русские пироги",
+      "split": "dev",
+      "expected_domains": [
+        "xn--80aebcypygk.xn--p1ai",
+        "glavpirog.ru"
+      ],
+      "gold_source": "https://xn--80aebcypygk.xn--p1ai/contacty/",
+      "note": "Кириллический домен; допустим подтверждённый основной домен или его алиас.",
+      "domain": null,
+      "status": "insufficient_evidence",
+      "ok": false,
+      "seconds": 46.63,
+      "search_calls": 3,
+      "read_urls": 12,
+      "cache_hits": 0,
+      "llm_calls": 3
+    },
+    {
+      "inn": "123",
+      "name": "Некорректный вход",
+      "split": "dev",
+      "expected_domains": [],
+      "gold_source": null,
+      "note": "Ошибка входа, не пример отсутствия сайта.",
+      "domain": null,
+      "status": "invalid_inn",
+      "ok": true,
+      "seconds": 0,
+      "search_calls": 0,
+      "read_urls": 0,
+      "cache_hits": 0,
+      "llm_calls": 0
+    },
+    {
+      "inn": "7801451618",
+      "name": "Бегет",
+      "split": "dev",
+      "expected_domains": [
+        "beget.com"
+      ],
+      "gold_source": "https://beget.com/ru/details",
+      "note": "Хостинг: чужие сайты на инфраструктуре компании не являются её сайтом.",
+      "domain": null,
+      "status": "insufficient_evidence",
+      "ok": false,
+      "seconds": 25.47,
+      "search_calls": 3,
+      "read_urls": 7,
+      "cache_hits": 0,
+      "llm_calls": 3
+    },
+    {
+      "inn": "7810962785",
+      "name": "Селектел",
+      "split": "dev",
+      "expected_domains": [
+        "selectel.ru"
+      ],
+      "gold_source": "https://selectel.ru/about/details/",
+      "note": "Действующее юрлицо после реорганизации, документы в PDF и HTML.",
+      "domain": "selectel.ru",
+      "status": "found",
+      "ok": true,
+      "seconds": 11.59,
+      "search_calls": 1,
+      "read_urls": 3,
+      "cache_hits": 0,
+      "llm_calls": 1
+    },
+    {
+      "inn": "7810353960",
+      "name": "ТаймВэб",
+      "split": "dev",
+      "expected_domains": [
+        "timeweb.com"
+      ],
+      "gold_source": "https://timeweb.com/ru/contacts/",
+      "note": "Домен сайта отличается от домена корпоративной почты.",
+      "domain": "timeweb.com",
+      "status": "found",
+      "ok": true,
+      "seconds": 37.97,
+      "search_calls": 2,
+      "read_urls": 8,
+      "cache_hits": 0,
+      "llm_calls": 2
+    },
+    {
+      "inn": "7733568767",
+      "name": "Регистратор доменных имен РЕГ.РУ",
+      "split": "dev",
+      "expected_domains": [
+        "reg.ru"
+      ],
+      "gold_source": "https://help.reg.ru/support/pravovyye-voprosy/dogovory/kak-zaklyuchit-dogovor-s-reg-ru",
+      "note": "Юридические документы на поддоменах и в PDF.",
+      "domain": null,
+      "status": "insufficient_evidence",
+      "ok": false,
+      "seconds": 21.45,
+      "search_calls": 3,
+      "read_urls": 12,
+      "cache_hits": 0,
+      "llm_calls": 3
+    },
+    {
+      "inn": "4401116480",
+      "name": "Совкомбанк",
+      "split": "dev",
+      "expected_domains": [
+        "sovcombank.ru"
+      ],
+      "gold_source": "https://sovcombank.ru/about/pages/requisites",
+      "note": "ИНН часто упоминается в платёжных реквизитах чужих сайтов.",
+      "domain": null,
+      "status": "insufficient_evidence",
+      "ok": false,
+      "seconds": 24.47,
+      "search_calls": 3,
+      "read_urls": 11,
+      "cache_hits": 0,
+      "llm_calls": 3
+    },
+    {
+      "inn": "7710140679",
+      "name": "ТБанк",
+      "split": "dev",
+      "expected_domains": [
+        "tbank.ru"
+      ],
+      "gold_source": "https://secrets.tbank.ru/cookie-policy/",
+      "note": "У банка есть собственный каталог контрагентов; карточка не доказывает владельца сайта.",
+      "domain": null,
+      "status": "search_error",
+      "ok": false,
+      "seconds": 23.6,
+      "search_calls": 3,
+      "read_urls": 5,
+      "cache_hits": 0,
+      "llm_calls": 3
+    }
+  ],
+  "summary": {
+    "cases": 12,
+    "correct": 5,
+    "returned_domains": 4,
+    "wrong_domains": 0,
+    "precision_on_returned": 1.0,
+    "positive_recall": 0.36363636363636365,
+    "median_seconds": 24.035,
+    "errors": 1
+  }
+}

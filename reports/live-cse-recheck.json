@@ -1,0 +1,119 @@
+{
+  "run_at": "2026-10-09T15:40:32.568546+00:00",
+  "python": "3.13.14",
+  "model_info": {
+    "id": "openai/gpt-6-luna",
+    "pricing": {
+      "prompt": "0.0000001",
+      "completion": "0.0000005",
+      "web_search": "0.01",
+      "input_cache_read": "0.00000001",
+      "input_cache_write": "0.000000125",
+      "overrides": [
+        {
+          "min_prompt_tokens": 272000,
+          "prompt": "0.0000002",
+          "completion": "0.00000075",
+          "input_cache_read": "0.00000002",
+          "input_cache_write": "0.00000025"
+        }
+      ]
+    },
+    "context_length": 1050000
+  },
+  "search_provider": "searx",
+  "source_sha256": "941e4dc378b3a5e3658f911a8ad8b7e7bf8ac5369552dde5c06123f90c82062b",
+  "rows": [
+    {
+      "inn": "9701034075",
+      "name": "Пироговая / Русские пироги",
+      "split": "dev",
+      "expected_domains": [
+        "xn--80aebcypygk.xn--p1ai",
+        "glavpirog.ru"
+      ],
+      "gold_source": "https://xn--80aebcypygk.xn--p1ai/contacty/",
+      "note": "Кириллический домен; допустим подтверждённый основной домен или его алиас.",
+      "domain": "xn--80aebcypygk.xn--p1ai",
+      "status": "found",
+      "ok": true,
+      "seconds": 32.61,
+      "search_calls": 2,
+      "read_urls": 9,
+      "cache_hits": 0,
+      "llm_calls": 2,
+      "llm_cost_usd": 0.00250685,
+      "search_failures": 0
+    },
+    {
+      "inn": "7710140679",
+      "name": "ТБанк",
+      "split": "dev",
+      "expected_domains": [
+        "tbank.ru"
+      ],
+      "gold_source": "https://secrets.tbank.ru/cookie-policy/",
+      "note": "У банка есть собственный каталог контрагентов; карточка не доказывает владельца сайта.",
+      "domain": null,
+      "status": "search_error",
+      "ok": false,
+      "seconds": 89.26,
+      "search_calls": 3,
+      "read_urls": 9,
+      "cache_hits": 0,
+      "llm_calls": 3,
+      "llm_cost_usd": 0.00335015,
+      "search_failures": 1
+    },
+    {
+      "inn": "7703270067",
+      "name": "АШАН",
+      "split": "holdout",
+      "expected_domains": [
+        "auchan.ru"
+      ],
+      "gold_source": "https://www.auchan.ru/b2b/publichnaya-oferta/",
+      "note": "Розничная торговля; роль продавца в оферте, банковский ИНН может встречаться рядом.",
+      "domain": "auchan.ru",
+      "status": "found",
+      "ok": true,
+      "seconds": 63.08,
+      "search_calls": 3,
+      "read_urls": 10,
+      "cache_hits": 0,
+      "llm_calls": 3,
+      "llm_cost_usd": 0.0034044,
+      "search_failures": 0
+    },
+    {
+      "inn": "7728551528",
+      "name": "Спортмастер",
+      "split": "holdout",
+      "expected_domains": [
+        "sportmaster.ru"
+      ],
+      "gold_source": "https://www.sportmaster.ru/upload/content/contentgate/prod/ru_sm/dip_content/2026/news/game/28_05/files_game_rules.pdf",
+      "note": "Розничная торговля; оператор собственной программы и магазина в PDF.",
+      "domain": "sportmaster.ru",
+      "status": "found",
+      "ok": true,
+      "seconds": 72.85,
+      "search_calls": 3,
+      "read_urls": 10,
+      "cache_hits": 0,
+      "llm_calls": 3,
+      "llm_cost_usd": 0.00388765,
+      "search_failures": 0
+    }
+  ],
+  "summary": {
+    "cases": 4,
+    "correct": 3,
+    "returned_domains": 3,
+    "wrong_domains": 0,
+    "precision_on_returned": 1.0,
+    "positive_recall": 0.75,
+    "median_seconds": 67.965,
+    "errors": 1
+  }
+}

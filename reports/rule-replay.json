@@ -1,0 +1,103 @@
+{
+  "note": "Повторная проверка правил на сохранённых решениях LLM, без новых вызовов модели и поиска.",
+  "rows": [
+    {
+      "inn": "7721581040",
+      "original_domain": "dadata.ru",
+      "domain": "dadata.ru",
+      "status": "found",
+      "changed": false
+    },
+    {
+      "inn": "9715225506",
+      "original_domain": "evotor.ru",
+      "domain": "evotor.ru",
+      "status": "found",
+      "changed": false
+    },
+    {
+      "inn": "6663003127",
+      "original_domain": "kontur.ru",
+      "domain": "kontur.ru",
+      "status": "found",
+      "changed": false
+    },
+    {
+      "inn": "9724061893",
+      "original_domain": "veter.cc",
+      "domain": "veter.cc",
+      "status": "found",
+      "changed": false
+    },
+    {
+      "inn": "9701034075",
+      "original_domain": null,
+      "domain": null,
+      "status": "insufficient_evidence",
+      "changed": false
+    },
+    {
+      "inn": "7801451618",
+      "original_domain": "beget.com",
+      "domain": "beget.com",
+      "status": "found",
+      "changed": false
+    },
+    {
+      "inn": "7810962785",
+      "original_domain": "selectel.ru",
+      "domain": "selectel.ru",
+      "status": "found",
+      "changed": false
+    },
+    {
+      "inn": "7810353960",
+      "original_domain": "timeweb.com",
+      "domain": "timeweb.com",
+      "status": "found",
+      "changed": false
+    },
+    {
+      "inn": "7733568767",
+      "original_domain": "reg.ru",
+      "domain": "reg.ru",
+      "status": "found",
+      "changed": false
+    },
+    {
+      "inn": "4401116480",
+      "original_domain": "sovcombank.ru",
+      "domain": "sovcombank.ru",
+      "status": "found",
+      "changed": false
+    },
+    {
+      "inn": "7710140679",
+      "original_domain": null,
+      "domain": null,
+      "status": "insufficient_evidence",
+      "changed": false
+    },
+    {
+      "inn": "9701004306",
+      "original_domain": "fitmost.ru",
+      "domain": "fitmost.ru",
+      "status": "found",
+      "changed": false
+    },
+    {
+      "inn": "7703809969",
+      "original_domain": "mann-ivanov-ferber.ru",
+      "domain": "mann-ivanov-ferber.ru",
+      "status": "found",
+      "changed": false
+    },
+    {
+      "inn": "7724709637",
+      "original_domain": "fotoproekt.ru",
+      "domain": null,
+      "status": "ambiguous",
+      "changed": true
+    }
+  ]
+}

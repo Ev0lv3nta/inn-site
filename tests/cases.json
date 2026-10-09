@@ -1,0 +1,183 @@
+[
+  {
+    "inn": "7721581040",
+    "name": "Дейта Кью / DaData",
+    "split": "dev",
+    "expected_domains": [
+      "dadata.ru"
+    ],
+    "gold_source": "https://dadata.ru/offer/",
+    "note": "Пример из задания; юридическое название отличается от бренда."
+  },
+  {
+    "inn": "9715225506",
+    "name": "Эвотор",
+    "split": "dev",
+    "expected_domains": [
+      "evotor.ru"
+    ],
+    "gold_source": "https://evotor.ru/about-us/",
+    "note": "Реквизиты на странице о компании."
+  },
+  {
+    "inn": "6663003127",
+    "name": "СКБ Контур",
+    "split": "dev",
+    "expected_domains": [
+      "kontur.ru"
+    ],
+    "gold_source": "https://kontur.ru/class/oferta",
+    "note": "Несколько продуктов и поддоменов."
+  },
+  {
+    "inn": "9724061893",
+    "name": "Ветер Спорт",
+    "split": "dev",
+    "expected_domains": [
+      "veter.cc"
+    ],
+    "gold_source": "https://veter.cc/terms-and-conditions/",
+    "note": "Малый бизнес; ИНН и роль продавца есть в оферте, но не на главной."
+  },
+  {
+    "inn": "9701034075",
+    "name": "Пироговая / Русские пироги",
+    "split": "dev",
+    "expected_domains": [
+      "xn--80aebcypygk.xn--p1ai",
+      "glavpirog.ru"
+    ],
+    "gold_source": "https://xn--80aebcypygk.xn--p1ai/contacty/",
+    "note": "Кириллический домен; допустим подтверждённый основной домен или его алиас."
+  },
+  {
+    "inn": "123",
+    "name": "Некорректный вход",
+    "split": "dev",
+    "expected_domains": [],
+    "gold_source": null,
+    "note": "Ошибка входа, не пример отсутствия сайта."
+  },
+  {
+    "inn": "7801451618",
+    "name": "Бегет",
+    "split": "dev",
+    "expected_domains": [
+      "beget.com"
+    ],
+    "gold_source": "https://beget.com/ru/details",
+    "note": "Хостинг: чужие сайты на инфраструктуре компании не являются её сайтом."
+  },
+  {
+    "inn": "7810962785",
+    "name": "Селектел",
+    "split": "dev",
+    "expected_domains": [
+      "selectel.ru"
+    ],
+    "gold_source": "https://selectel.ru/about/details/",
+    "note": "Действующее юрлицо после реорганизации, документы в PDF и HTML."
+  },
+  {
+    "inn": "7810353960",
+    "name": "ТаймВэб",
+    "split": "dev",
+    "expected_domains": [
+      "timeweb.com"
+    ],
+    "gold_source": "https://timeweb.com/ru/contacts/",
+    "note": "Домен сайта отличается от домена корпоративной почты."
+  },
+  {
+    "inn": "7733568767",
+    "name": "Регистратор доменных имен РЕГ.РУ",
+    "split": "dev",
+    "expected_domains": [
+      "reg.ru"
+    ],
+    "gold_source": "https://help.reg.ru/support/pravovyye-voprosy/dogovory/kak-zaklyuchit-dogovor-s-reg-ru",
+    "note": "Юридические документы на поддоменах и в PDF."
+  },
+  {
+    "inn": "4401116480",
+    "name": "Совкомбанк",
+    "split": "dev",
+    "expected_domains": [
+      "sovcombank.ru"
+    ],
+    "gold_source": "https://sovcombank.ru/about/pages/requisites",
+    "note": "ИНН часто упоминается в платёжных реквизитах чужих сайтов."
+  },
+  {
+    "inn": "7710140679",
+    "name": "ТБанк",
+    "split": "dev",
+    "expected_domains": [
+      "tbank.ru"
+    ],
+    "gold_source": "https://secrets.tbank.ru/cookie-policy/",
+    "note": "У банка есть собственный каталог контрагентов; карточка не доказывает владельца сайта."
+  },
+  {
+    "inn": "9701004306",
+    "name": "ФитМост",
+    "split": "dev",
+    "expected_domains": [
+      "fitmost.ru"
+    ],
+    "gold_source": "https://www.fitmost.ru/documents/offer_21.11.2025.pdf",
+    "note": "Сервис занятий спортом; юридическое подтверждение в PDF."
+  },
+  {
+    "inn": "7703809969",
+    "name": "Манн, Иванов и Фербер",
+    "split": "dev",
+    "expected_domains": [
+      "mann-ivanov-ferber.ru"
+    ],
+    "gold_source": "https://www.mann-ivanov-ferber.ru/oferta-na-okazanie-platnyh-uslug",
+    "note": "Издательство и образовательные услуги; реквизиты в оферте."
+  },
+  {
+    "inn": "7724709637",
+    "name": "Фотоэксперт: несколько брендов",
+    "split": "dev",
+    "expected_domains": [],
+    "gold_source": "https://fotoproekt.ru/requisites",
+    "note": "Неоднозначный основной домен. Фотоэксперт подтверждён на нескольких собственных сайтах; эталон netprint.ru исправлен после аудита первого контрольного прогона.",
+    "additional_gold_sources": [
+      "https://printbook.ru/privacy",
+      "https://partner.netprint.ru/ru/145/2415/"
+    ]
+  },
+  {
+    "inn": "7719571260",
+    "name": "ЛитРес",
+    "split": "holdout",
+    "expected_domains": [
+      "litres.ru"
+    ],
+    "gold_source": "https://www.litres.ru/company/contacts/",
+    "note": "Продавец электронных книг; реквизиты на собственном сайте."
+  },
+  {
+    "inn": "7703270067",
+    "name": "АШАН",
+    "split": "holdout",
+    "expected_domains": [
+      "auchan.ru"
+    ],
+    "gold_source": "https://www.auchan.ru/b2b/publichnaya-oferta/",
+    "note": "Розничная торговля; роль продавца в оферте, банковский ИНН может встречаться рядом."
+  },
+  {
+    "inn": "7728551528",
+    "name": "Спортмастер",
+    "split": "holdout",
+    "expected_domains": [
+      "sportmaster.ru"
+    ],
+    "gold_source": "https://www.sportmaster.ru/upload/content/contentgate/prod/ru_sm/dip_content/2026/news/game/28_05/files_game_rules.pdf",
+    "note": "Розничная торговля; оператор собственной программы и магазина в PDF."
+  }
+]

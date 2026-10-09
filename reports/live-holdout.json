@@ -1,0 +1,98 @@
+{
+  "run_at": "2026-10-09T15:05:10.962616+00:00",
+  "python": "3.13.14",
+  "model_info": {
+    "id": "openai/gpt-6-luna",
+    "pricing": {
+      "prompt": "0.0000001",
+      "completion": "0.0000005",
+      "web_search": "0.01",
+      "input_cache_read": "0.00000001",
+      "input_cache_write": "0.000000125",
+      "overrides": [
+        {
+          "min_prompt_tokens": 272000,
+          "prompt": "0.0000002",
+          "completion": "0.00000075",
+          "input_cache_read": "0.00000002",
+          "input_cache_write": "0.00000025"
+        }
+      ]
+    },
+    "context_length": 1050000
+  },
+  "search_provider": "searx",
+  "source_sha256": "c6c5a7003532156b610e482a17c937fd6983cfc3bcf65ef0731872399ef6cdbc",
+  "rows": [
+    {
+      "inn": "9701004306",
+      "name": "ФитМост",
+      "split": "holdout",
+      "expected_domains": [
+        "fitmost.ru"
+      ],
+      "gold_source": "https://www.fitmost.ru/documents/offer_21.11.2025.pdf",
+      "note": "Сервис занятий спортом; юридическое подтверждение в PDF.",
+      "domain": "fitmost.ru",
+      "status": "found",
+      "ok": true,
+      "seconds": 40.73,
+      "search_calls": 3,
+      "read_urls": 10,
+      "cache_hits": 0,
+      "llm_calls": 3,
+      "llm_cost_usd": 0.00410265,
+      "search_failures": 0
+    },
+    {
+      "inn": "7703809969",
+      "name": "Манн, Иванов и Фербер",
+      "split": "holdout",
+      "expected_domains": [
+        "mann-ivanov-ferber.ru"
+      ],
+      "gold_source": "https://www.mann-ivanov-ferber.ru/oferta-na-okazanie-platnyh-uslug",
+      "note": "Издательство и образовательные услуги; реквизиты в оферте.",
+      "domain": "mann-ivanov-ferber.ru",
+      "status": "found",
+      "ok": true,
+      "seconds": 69.07,
+      "search_calls": 3,
+      "read_urls": 11,
+      "cache_hits": 0,
+      "llm_calls": 3,
+      "llm_cost_usd": 0.00424452,
+      "search_failures": 0
+    },
+    {
+      "inn": "7724709637",
+      "name": "Фотоэксперт / netPrint",
+      "split": "holdout",
+      "expected_domains": [
+        "netprint.ru"
+      ],
+      "gold_source": "https://partner.netprint.ru/ru/145/2415/",
+      "note": "Фотопечать; оператор сервиса и бренд имеют разные названия.",
+      "domain": "fotoproekt.ru",
+      "status": "found",
+      "ok": false,
+      "seconds": 40.69,
+      "search_calls": 2,
+      "read_urls": 7,
+      "cache_hits": 0,
+      "llm_calls": 2,
+      "llm_cost_usd": 0.00236222,
+      "search_failures": 0
+    }
+  ],
+  "summary": {
+    "cases": 3,
+    "correct": 2,
+    "returned_domains": 3,
+    "wrong_domains": 1,
+    "precision_on_returned": 0.6666666666666666,
+    "positive_recall": 0.6666666666666666,
+    "median_seconds": 40.73,
+    "errors": 0
+  }
+}

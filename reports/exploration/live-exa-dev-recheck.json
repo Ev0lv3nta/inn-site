@@ -1,0 +1,79 @@
+{
+  "run_at": "2026-10-09T12:34:47.972921+00:00",
+  "python": "3.13.14",
+  "model_info": {
+    "models": [
+      {
+        "name": "qwen3.5:4b",
+        "model": "qwen3.5:4b",
+        "modified_at": "2026-10-09T15:20:38.11884666+03:00",
+        "size": 3973305013,
+        "digest": "7f3251fa6878a78a606bcb3c074283306e5ad2ea411a7774a9dd98a4bc7f2d13",
+        "details": {
+          "parent_model": "",
+          "format": "safetensors",
+          "family": "",
+          "families": null,
+          "parameter_size": "",
+          "quantization_level": "nvfp4",
+          "runner": "mlx"
+        },
+        "capabilities": [
+          "completion",
+          "vision",
+          "thinking",
+          "tools"
+        ]
+      }
+    ]
+  },
+  "search_provider": "exa",
+  "rows": [
+    {
+      "inn": "6663003127",
+      "name": "СКБ Контур",
+      "split": "dev",
+      "expected_domains": [
+        "kontur.ru"
+      ],
+      "gold_source": "https://kontur.ru/class/oferta",
+      "note": "Несколько продуктов и поддоменов.",
+      "domain": "kontur.ru",
+      "status": "found",
+      "ok": true,
+      "seconds": 27.71,
+      "search_calls": 1,
+      "read_urls": 1,
+      "cache_hits": 2,
+      "llm_calls": 1
+    },
+    {
+      "inn": "9724061893",
+      "name": "Ветер Спорт",
+      "split": "dev",
+      "expected_domains": [
+        "veter.cc"
+      ],
+      "gold_source": "https://veter.cc/terms-and-conditions/",
+      "note": "Малый бизнес; ИНН и роль продавца есть в оферте, но не на главной.",
+      "domain": "veter.cc",
+      "status": "found",
+      "ok": true,
+      "seconds": 130.48,
+      "search_calls": 2,
+      "read_urls": 12,
+      "cache_hits": 2,
+      "llm_calls": 2
+    }
+  ],
+  "summary": {
+    "cases": 2,
+    "correct": 2,
+    "returned_domains": 2,
+    "wrong_domains": 0,
+    "precision_on_returned": 1.0,
+    "positive_recall": 1.0,
+    "median_seconds": 79.095,
+    "errors": 0
+  }
+}

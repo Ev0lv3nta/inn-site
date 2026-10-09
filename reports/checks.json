@@ -1,0 +1,35 @@
+{
+  "source_sha256": "674fd723193ef1d1328974cf4e2ba9221521f119ea6ef11d978da5a8c28cb9b1",
+  "pytest": {
+    "passed": 65,
+    "exit_code": 0
+  },
+  "ruff": {
+    "exit_code": 0
+  },
+  "llm_regression": {
+    "passed": 13,
+    "cases": 13
+  },
+  "live_final": {
+    "cases": 18,
+    "correct": 16,
+    "returned_domains": 14,
+    "wrong_domains": 0,
+    "precision_on_returned": 1.0,
+    "positive_recall": 0.875,
+    "median_seconds": 32.400000000000006,
+    "errors": 1
+  },
+  "llm_spend_usd": {
+    "allocated_usd": "0.207683400",
+    "observed_usd": "0.185615700"
+  },
+  "secrets_scan": "no environment credentials in deliverable files",
+  "pdf": {
+    "pages": 6,
+    "theory_pages": 3,
+    "practice_pages": 3,
+    "visually_verified": true
+  }
+}

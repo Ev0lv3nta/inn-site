@@ -1,0 +1,98 @@
+{
+  "run_at": "2026-10-09T15:17:48.556242+00:00",
+  "python": "3.13.14",
+  "model_info": {
+    "id": "openai/gpt-6-luna",
+    "pricing": {
+      "prompt": "0.0000001",
+      "completion": "0.0000005",
+      "web_search": "0.01",
+      "input_cache_read": "0.00000001",
+      "input_cache_write": "0.000000125",
+      "overrides": [
+        {
+          "min_prompt_tokens": 272000,
+          "prompt": "0.0000002",
+          "completion": "0.00000075",
+          "input_cache_read": "0.00000002",
+          "input_cache_write": "0.00000025"
+        }
+      ]
+    },
+    "context_length": 1050000
+  },
+  "search_provider": "searx",
+  "source_sha256": "3d27ea62a1f903be0b6a26c53e0f3c48783114596264f7ace3dd760ff852b257",
+  "rows": [
+    {
+      "inn": "7719571260",
+      "name": "ЛитРес",
+      "split": "holdout",
+      "expected_domains": [
+        "litres.ru"
+      ],
+      "gold_source": "https://www.litres.ru/company/contacts/",
+      "note": "Продавец электронных книг; реквизиты на собственном сайте.",
+      "domain": "litres.ru",
+      "status": "found",
+      "ok": true,
+      "seconds": 29.47,
+      "search_calls": 2,
+      "read_urls": 9,
+      "cache_hits": 0,
+      "llm_calls": 2,
+      "llm_cost_usd": 0.00223122,
+      "search_failures": 0
+    },
+    {
+      "inn": "7703270067",
+      "name": "АШАН",
+      "split": "holdout",
+      "expected_domains": [
+        "auchan.ru"
+      ],
+      "gold_source": "https://www.auchan.ru/b2b/publichnaya-oferta/",
+      "note": "Розничная торговля; роль продавца в оферте, банковский ИНН может встречаться рядом.",
+      "domain": null,
+      "status": "search_error",
+      "ok": false,
+      "seconds": 61.16,
+      "search_calls": 3,
+      "read_urls": 7,
+      "cache_hits": 0,
+      "llm_calls": 3,
+      "llm_cost_usd": 0.00185886,
+      "search_failures": 1
+    },
+    {
+      "inn": "7728551528",
+      "name": "Спортмастер",
+      "split": "holdout",
+      "expected_domains": [
+        "sportmaster.ru"
+      ],
+      "gold_source": "https://www.sportmaster.ru/upload/content/contentgate/prod/ru_sm/dip_content/2026/news/game/28_05/files_game_rules.pdf",
+      "note": "Розничная торговля; оператор собственной программы и магазина в PDF.",
+      "domain": null,
+      "status": "search_error",
+      "ok": false,
+      "seconds": 22.03,
+      "search_calls": 3,
+      "read_urls": 4,
+      "cache_hits": 0,
+      "llm_calls": 3,
+      "llm_cost_usd": 0.0016999,
+      "search_failures": 2
+    }
+  ],
+  "summary": {
+    "cases": 3,
+    "correct": 1,
+    "returned_domains": 1,
+    "wrong_domains": 0,
+    "precision_on_returned": 1.0,
+    "positive_recall": 0.3333333333333333,
+    "median_seconds": 29.47,
+    "errors": 2
+  }
+}

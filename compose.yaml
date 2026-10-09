@@ -1,0 +1,15 @@
+services:
+  search:
+    image: searxng/searxng@sha256:8c1e68e5b8eee8f5cdc6c4745df364b0c72269024a7a9b2a3ef34ee72b66e75e
+    ports:
+      - "127.0.0.1:8888:8080"
+    volumes:
+      - ./search/settings.yml:/etc/searxng/settings.yml:ro
+    mem_limit: 512m
+    cpus: 1
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--spider", "http://127.0.0.1:8080/healthz"]
+      interval: 5s
+      timeout: 3s
+      retries: 6
+      start_period: 10s

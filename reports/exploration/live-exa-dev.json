@@ -1,0 +1,150 @@
+{
+  "run_at": "2026-10-09T12:25:57.963752+00:00",
+  "python": "3.13.14",
+  "model_info": {
+    "models": [
+      {
+        "name": "qwen3.5:4b",
+        "model": "qwen3.5:4b",
+        "modified_at": "2026-10-09T15:20:38.11884666+03:00",
+        "size": 3973305013,
+        "digest": "7f3251fa6878a78a606bcb3c074283306e5ad2ea411a7774a9dd98a4bc7f2d13",
+        "details": {
+          "parent_model": "",
+          "format": "safetensors",
+          "family": "",
+          "families": null,
+          "parameter_size": "",
+          "quantization_level": "nvfp4",
+          "runner": "mlx"
+        },
+        "capabilities": [
+          "completion",
+          "vision",
+          "thinking",
+          "tools"
+        ]
+      }
+    ]
+  },
+  "search_provider": "exa",
+  "rows": [
+    {
+      "inn": "7721581040",
+      "name": "Дейта Кью / DaData",
+      "split": "dev",
+      "expected_domains": [
+        "dadata.ru"
+      ],
+      "gold_source": "https://dadata.ru/offer/",
+      "note": "Пример из задания; юридическое название отличается от бренда.",
+      "domain": "dadata.ru",
+      "status": "found",
+      "ok": true,
+      "seconds": 43.42,
+      "search_calls": 1,
+      "read_urls": 1,
+      "cache_hits": 0,
+      "llm_calls": 1
+    },
+    {
+      "inn": "9715225506",
+      "name": "Эвотор",
+      "split": "dev",
+      "expected_domains": [
+        "evotor.ru"
+      ],
+      "gold_source": "https://evotor.ru/about-us/",
+      "note": "Реквизиты на странице о компании.",
+      "domain": "evotor.ru",
+      "status": "found",
+      "ok": true,
+      "seconds": 66.61,
+      "search_calls": 1,
+      "read_urls": 2,
+      "cache_hits": 0,
+      "llm_calls": 1
+    },
+    {
+      "inn": "6663003127",
+      "name": "СКБ Контур",
+      "split": "dev",
+      "expected_domains": [
+        "kontur.ru"
+      ],
+      "gold_source": "https://kontur.ru/class/oferta",
+      "note": "Несколько продуктов и поддоменов.",
+      "domain": null,
+      "status": "llm_error",
+      "ok": false,
+      "seconds": 104.29,
+      "search_calls": 1,
+      "read_urls": 4,
+      "cache_hits": 0,
+      "llm_calls": 0
+    },
+    {
+      "inn": "9724061893",
+      "name": "Ветер Спорт",
+      "split": "dev",
+      "expected_domains": [
+        "veter.cc"
+      ],
+      "gold_source": "https://veter.cc/terms-and-conditions/",
+      "note": "Малый бизнес; ИНН и роль продавца есть в оферте, но не на главной.",
+      "domain": null,
+      "status": "insufficient_evidence",
+      "ok": false,
+      "seconds": 32.17,
+      "search_calls": 1,
+      "read_urls": 1,
+      "cache_hits": 0,
+      "llm_calls": 1
+    },
+    {
+      "inn": "9701034075",
+      "name": "Пироговая / Русские пироги",
+      "split": "dev",
+      "expected_domains": [
+        "xn--80aebcypygk.xn--p1ai",
+        "glavpirog.ru"
+      ],
+      "gold_source": "https://xn--80aebcypygk.xn--p1ai/contacty/",
+      "note": "Кириллический домен; допустим подтверждённый основной домен или его алиас.",
+      "domain": "xn--80aebcypygk.xn--p1ai",
+      "status": "found",
+      "ok": true,
+      "seconds": 80.39,
+      "search_calls": 1,
+      "read_urls": 9,
+      "cache_hits": 0,
+      "llm_calls": 1
+    },
+    {
+      "inn": "123",
+      "name": "Некорректный вход",
+      "split": "dev",
+      "expected_domains": [],
+      "gold_source": null,
+      "note": "Ошибка входа, не пример отсутствия сайта.",
+      "domain": null,
+      "status": "invalid_inn",
+      "ok": true,
+      "seconds": 0,
+      "search_calls": 0,
+      "read_urls": 0,
+      "cache_hits": 0,
+      "llm_calls": 0
+    }
+  ],
+  "summary": {
+    "cases": 6,
+    "correct": 4,
+    "returned_domains": 3,
+    "wrong_domains": 0,
+    "precision_on_returned": 1.0,
+    "positive_recall": 0.6,
+    "median_seconds": 55.015,
+    "errors": 1
+  }
+}

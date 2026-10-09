@@ -1,0 +1,58 @@
+{
+  "run_at": "2026-10-09T15:48:08.897579+00:00",
+  "python": "3.13.14",
+  "model_info": {
+    "id": "openai/gpt-6-luna",
+    "pricing": {
+      "prompt": "0.0000001",
+      "completion": "0.0000005",
+      "web_search": "0.01",
+      "input_cache_read": "0.00000001",
+      "input_cache_write": "0.000000125",
+      "overrides": [
+        {
+          "min_prompt_tokens": 272000,
+          "prompt": "0.0000002",
+          "completion": "0.00000075",
+          "input_cache_read": "0.00000002",
+          "input_cache_write": "0.00000025"
+        }
+      ]
+    },
+    "context_length": 1050000
+  },
+  "search_provider": "searx",
+  "source_sha256": "4c025d041e9644baf5c807a64105352bc92ca9078533a0244c593cd3a27cb452",
+  "rows": [
+    {
+      "inn": "7710140679",
+      "name": "ТБанк",
+      "split": "dev",
+      "expected_domains": [
+        "tbank.ru"
+      ],
+      "gold_source": "https://secrets.tbank.ru/cookie-policy/",
+      "note": "У банка есть собственный каталог контрагентов; карточка не доказывает владельца сайта.",
+      "domain": null,
+      "status": "search_error",
+      "ok": false,
+      "seconds": 107.07,
+      "search_calls": 3,
+      "read_urls": 9,
+      "cache_hits": 0,
+      "llm_calls": 3,
+      "llm_cost_usd": 0.00426049,
+      "search_failures": 1
+    }
+  ],
+  "summary": {
+    "cases": 1,
+    "correct": 0,
+    "returned_domains": 0,
+    "wrong_domains": 0,
+    "precision_on_returned": null,
+    "positive_recall": 0.0,
+    "median_seconds": 107.07,
+    "errors": 1
+  }
+}

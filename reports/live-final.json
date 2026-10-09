@@ -1,0 +1,399 @@
+{
+  "run_at": "2026-10-09T16:06:33.993971+00:00",
+  "python": "3.13.14",
+  "model_info": {
+    "id": "openai/gpt-6-luna",
+    "pricing": {
+      "prompt": "0.0000001",
+      "completion": "0.0000005",
+      "web_search": "0.01",
+      "input_cache_read": "0.00000001",
+      "input_cache_write": "0.000000125",
+      "overrides": [
+        {
+          "min_prompt_tokens": 272000,
+          "prompt": "0.0000002",
+          "completion": "0.00000075",
+          "input_cache_read": "0.00000002",
+          "input_cache_write": "0.00000025"
+        }
+      ]
+    },
+    "context_length": 1050000
+  },
+  "search_provider": "searx",
+  "source_sha256": "674fd723193ef1d1328974cf4e2ba9221521f119ea6ef11d978da5a8c28cb9b1",
+  "rows": [
+    {
+      "inn": "7721581040",
+      "name": "Дейта Кью / DaData",
+      "split": "dev",
+      "expected_domains": [
+        "dadata.ru"
+      ],
+      "gold_source": "https://dadata.ru/offer/",
+      "note": "Пример из задания; юридическое название отличается от бренда.",
+      "domain": "dadata.ru",
+      "status": "found",
+      "ok": true,
+      "seconds": 57.74,
+      "search_calls": 2,
+      "read_urls": 7,
+      "cache_hits": 0,
+      "llm_calls": 2,
+      "llm_cost_usd": 0.00261923,
+      "search_failures": 0
+    },
+    {
+      "inn": "9715225506",
+      "name": "Эвотор",
+      "split": "dev",
+      "expected_domains": [
+        "evotor.ru"
+      ],
+      "gold_source": "https://evotor.ru/about-us/",
+      "note": "Реквизиты на странице о компании.",
+      "domain": "evotor.ru",
+      "status": "found",
+      "ok": true,
+      "seconds": 36.77,
+      "search_calls": 1,
+      "read_urls": 6,
+      "cache_hits": 0,
+      "llm_calls": 1,
+      "llm_cost_usd": 0.00164767,
+      "search_failures": 0
+    },
+    {
+      "inn": "6663003127",
+      "name": "СКБ Контур",
+      "split": "dev",
+      "expected_domains": [
+        "kontur.ru"
+      ],
+      "gold_source": "https://kontur.ru/class/oferta",
+      "note": "Несколько продуктов и поддоменов.",
+      "domain": "kontur.ru",
+      "status": "found",
+      "ok": true,
+      "seconds": 18.07,
+      "search_calls": 1,
+      "read_urls": 4,
+      "cache_hits": 0,
+      "llm_calls": 1,
+      "llm_cost_usd": 0.0014178,
+      "search_failures": 0
+    },
+    {
+      "inn": "9724061893",
+      "name": "Ветер Спорт",
+      "split": "dev",
+      "expected_domains": [
+        "veter.cc"
+      ],
+      "gold_source": "https://veter.cc/terms-and-conditions/",
+      "note": "Малый бизнес; ИНН и роль продавца есть в оферте, но не на главной.",
+      "domain": "veter.cc",
+      "status": "found",
+      "ok": true,
+      "seconds": 15.78,
+      "search_calls": 1,
+      "read_urls": 6,
+      "cache_hits": 0,
+      "llm_calls": 1,
+      "llm_cost_usd": 0.0013103,
+      "search_failures": 0
+    },
+    {
+      "inn": "9701034075",
+      "name": "Пироговая / Русские пироги",
+      "split": "dev",
+      "expected_domains": [
+        "xn--80aebcypygk.xn--p1ai",
+        "glavpirog.ru"
+      ],
+      "gold_source": "https://xn--80aebcypygk.xn--p1ai/contacty/",
+      "note": "Кириллический домен; допустим подтверждённый основной домен или его алиас.",
+      "domain": "xn--80aebcypygk.xn--p1ai",
+      "status": "found",
+      "ok": true,
+      "seconds": 25.64,
+      "search_calls": 2,
+      "read_urls": 9,
+      "cache_hits": 0,
+      "llm_calls": 2,
+      "llm_cost_usd": 0.00224422,
+      "search_failures": 0
+    },
+    {
+      "inn": "123",
+      "name": "Некорректный вход",
+      "split": "dev",
+      "expected_domains": [],
+      "gold_source": null,
+      "note": "Ошибка входа, не пример отсутствия сайта.",
+      "domain": null,
+      "status": "invalid_inn",
+      "ok": true,
+      "seconds": 0,
+      "search_calls": 0,
+      "read_urls": 0,
+      "cache_hits": 0,
+      "llm_calls": 0,
+      "llm_cost_usd": 0,
+      "search_failures": 0
+    },
+    {
+      "inn": "7801451618",
+      "name": "Бегет",
+      "split": "dev",
+      "expected_domains": [
+        "beget.com"
+      ],
+      "gold_source": "https://beget.com/ru/details",
+      "note": "Хостинг: чужие сайты на инфраструктуре компании не являются её сайтом.",
+      "domain": "beget.com",
+      "status": "found",
+      "ok": true,
+      "seconds": 14.69,
+      "search_calls": 1,
+      "read_urls": 6,
+      "cache_hits": 0,
+      "llm_calls": 1,
+      "llm_cost_usd": 0.0012533,
+      "search_failures": 0
+    },
+    {
+      "inn": "7810962785",
+      "name": "Селектел",
+      "split": "dev",
+      "expected_domains": [
+        "selectel.ru"
+      ],
+      "gold_source": "https://selectel.ru/about/details/",
+      "note": "Действующее юрлицо после реорганизации, документы в PDF и HTML.",
+      "domain": "selectel.ru",
+      "status": "found",
+      "ok": true,
+      "seconds": 32.59,
+      "search_calls": 1,
+      "read_urls": 6,
+      "cache_hits": 0,
+      "llm_calls": 1,
+      "llm_cost_usd": 0.00123218,
+      "search_failures": 0
+    },
+    {
+      "inn": "7810353960",
+      "name": "ТаймВэб",
+      "split": "dev",
+      "expected_domains": [
+        "timeweb.com"
+      ],
+      "gold_source": "https://timeweb.com/ru/contacts/",
+      "note": "Домен сайта отличается от домена корпоративной почты.",
+      "domain": "timeweb.com",
+      "status": "found",
+      "ok": true,
+      "seconds": 16.49,
+      "search_calls": 1,
+      "read_urls": 6,
+      "cache_hits": 0,
+      "llm_calls": 1,
+      "llm_cost_usd": 0.00148317,
+      "search_failures": 0
+    },
+    {
+      "inn": "7733568767",
+      "name": "Регистратор доменных имен РЕГ.РУ",
+      "split": "dev",
+      "expected_domains": [
+        "reg.ru"
+      ],
+      "gold_source": "https://help.reg.ru/support/pravovyye-voprosy/dogovory/kak-zaklyuchit-dogovor-s-reg-ru",
+      "note": "Юридические документы на поддоменах и в PDF.",
+      "domain": "reg.ru",
+      "status": "found",
+      "ok": true,
+      "seconds": 22.47,
+      "search_calls": 1,
+      "read_urls": 6,
+      "cache_hits": 0,
+      "llm_calls": 1,
+      "llm_cost_usd": 0.00150105,
+      "search_failures": 0
+    },
+    {
+      "inn": "4401116480",
+      "name": "Совкомбанк",
+      "split": "dev",
+      "expected_domains": [
+        "sovcombank.ru"
+      ],
+      "gold_source": "https://sovcombank.ru/about/pages/requisites",
+      "note": "ИНН часто упоминается в платёжных реквизитах чужих сайтов.",
+      "domain": "sovcombank.ru",
+      "status": "found",
+      "ok": true,
+      "seconds": 54.11,
+      "search_calls": 3,
+      "read_urls": 9,
+      "cache_hits": 0,
+      "llm_calls": 3,
+      "llm_cost_usd": 0.0040789,
+      "search_failures": 0
+    },
+    {
+      "inn": "7710140679",
+      "name": "ТБанк",
+      "split": "dev",
+      "expected_domains": [
+        "tbank.ru"
+      ],
+      "gold_source": "https://secrets.tbank.ru/cookie-policy/",
+      "note": "У банка есть собственный каталог контрагентов; карточка не доказывает владельца сайта.",
+      "domain": "tbank.ru",
+      "status": "found",
+      "ok": true,
+      "seconds": 146.47,
+      "search_calls": 3,
+      "read_urls": 12,
+      "cache_hits": 0,
+      "llm_calls": 3,
+      "llm_cost_usd": 0.0051004,
+      "search_failures": 1
+    },
+    {
+      "inn": "9701004306",
+      "name": "ФитМост",
+      "split": "dev",
+      "expected_domains": [
+        "fitmost.ru"
+      ],
+      "gold_source": "https://www.fitmost.ru/documents/offer_21.11.2025.pdf",
+      "note": "Сервис занятий спортом; юридическое подтверждение в PDF.",
+      "domain": "fitmost.ru",
+      "status": "found",
+      "ok": true,
+      "seconds": 32.21,
+      "search_calls": 2,
+      "read_urls": 8,
+      "cache_hits": 0,
+      "llm_calls": 2,
+      "llm_cost_usd": 0.00350223,
+      "search_failures": 0
+    },
+    {
+      "inn": "7703809969",
+      "name": "Манн, Иванов и Фербер",
+      "split": "dev",
+      "expected_domains": [
+        "mann-ivanov-ferber.ru"
+      ],
+      "gold_source": "https://www.mann-ivanov-ferber.ru/oferta-na-okazanie-platnyh-uslug",
+      "note": "Издательство и образовательные услуги; реквизиты в оферте.",
+      "domain": "mann-ivanov-ferber.ru",
+      "status": "found",
+      "ok": true,
+      "seconds": 64.32,
+      "search_calls": 2,
+      "read_urls": 8,
+      "cache_hits": 0,
+      "llm_calls": 2,
+      "llm_cost_usd": 0.00442835,
+      "search_failures": 0
+    },
+    {
+      "inn": "7724709637",
+      "name": "Фотоэксперт: несколько брендов",
+      "split": "dev",
+      "expected_domains": [],
+      "gold_source": "https://fotoproekt.ru/requisites",
+      "note": "Неоднозначный основной домен. Фотоэксперт подтверждён на нескольких собственных сайтах; эталон netprint.ru исправлен после аудита первого контрольного прогона.",
+      "additional_gold_sources": [
+        "https://printbook.ru/privacy",
+        "https://partner.netprint.ru/ru/145/2415/"
+      ],
+      "domain": null,
+      "status": "ambiguous",
+      "ok": true,
+      "seconds": 23.04,
+      "search_calls": 1,
+      "read_urls": 6,
+      "cache_hits": 0,
+      "llm_calls": 1,
+      "llm_cost_usd": 0.0019328,
+      "search_failures": 0
+    },
+    {
+      "inn": "7719571260",
+      "name": "ЛитРес",
+      "split": "holdout",
+      "expected_domains": [
+        "litres.ru"
+      ],
+      "gold_source": "https://www.litres.ru/company/contacts/",
+      "note": "Продавец электронных книг; реквизиты на собственном сайте.",
+      "domain": null,
+      "status": "search_error",
+      "ok": false,
+      "seconds": 82.47,
+      "search_calls": 3,
+      "read_urls": 5,
+      "cache_hits": 0,
+      "llm_calls": 3,
+      "llm_cost_usd": 0.00429956,
+      "search_failures": 1
+    },
+    {
+      "inn": "7703270067",
+      "name": "АШАН",
+      "split": "holdout",
+      "expected_domains": [
+        "auchan.ru"
+      ],
+      "gold_source": "https://www.auchan.ru/b2b/publichnaya-oferta/",
+      "note": "Розничная торговля; роль продавца в оферте, банковский ИНН может встречаться рядом.",
+      "domain": null,
+      "status": "insufficient_evidence",
+      "ok": false,
+      "seconds": 91.09,
+      "search_calls": 3,
+      "read_urls": 10,
+      "cache_hits": 0,
+      "llm_calls": 3,
+      "llm_cost_usd": 0.00336178,
+      "search_failures": 0
+    },
+    {
+      "inn": "7728551528",
+      "name": "Спортмастер",
+      "split": "holdout",
+      "expected_domains": [
+        "sportmaster.ru"
+      ],
+      "gold_source": "https://www.sportmaster.ru/upload/content/contentgate/prod/ru_sm/dip_content/2026/news/game/28_05/files_game_rules.pdf",
+      "note": "Розничная торговля; оператор собственной программы и магазина в PDF.",
+      "domain": "sportmaster.ru",
+      "status": "found",
+      "ok": true,
+      "seconds": 62.72,
+      "search_calls": 3,
+      "read_urls": 10,
+      "cache_hits": 0,
+      "llm_calls": 3,
+      "llm_cost_usd": 0.00365852,
+      "search_failures": 0
+    }
+  ],
+  "summary": {
+    "cases": 18,
+    "correct": 16,
+    "returned_domains": 14,
+    "wrong_domains": 0,
+    "precision_on_returned": 1.0,
+    "positive_recall": 0.875,
+    "median_seconds": 32.400000000000006,
+    "errors": 1
+  }
+}

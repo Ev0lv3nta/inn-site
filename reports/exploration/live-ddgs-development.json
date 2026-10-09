@@ -1,0 +1,116 @@
+{
+  "run_at": "2026-10-09T13:04:06.697708+00:00",
+  "python": "3.13.14",
+  "model_info": {
+    "models": [
+      {
+        "name": "qwen3.5:4b",
+        "model": "qwen3.5:4b",
+        "modified_at": "2026-10-09T15:20:38.11884666+03:00",
+        "size": 3973305013,
+        "digest": "7f3251fa6878a78a606bcb3c074283306e5ad2ea411a7774a9dd98a4bc7f2d13",
+        "details": {
+          "parent_model": "",
+          "format": "safetensors",
+          "family": "",
+          "families": null,
+          "parameter_size": "",
+          "quantization_level": "nvfp4",
+          "runner": "mlx"
+        },
+        "capabilities": [
+          "completion",
+          "vision",
+          "thinking",
+          "tools"
+        ]
+      }
+    ]
+  },
+  "search_provider": "ddgs",
+  "source_sha256": "25e17fdeacf3a1d842639d487635c3ab7cdd575dfaa7e5d33701fb6308dbff92",
+  "rows": [
+    {
+      "inn": "7810353960",
+      "name": "ТаймВэб",
+      "split": "holdout",
+      "expected_domains": [
+        "timeweb.com"
+      ],
+      "gold_source": "https://timeweb.com/ru/contacts/",
+      "note": "Домен сайта отличается от домена корпоративной почты.",
+      "domain": "sensus.kz",
+      "status": "found",
+      "ok": false,
+      "seconds": 46.37,
+      "search_calls": 1,
+      "read_urls": 2,
+      "cache_hits": 0,
+      "llm_calls": 1
+    },
+    {
+      "inn": "7733568767",
+      "name": "Регистратор доменных имен РЕГ.РУ",
+      "split": "holdout",
+      "expected_domains": [
+        "reg.ru"
+      ],
+      "gold_source": "https://help.reg.ru/support/pravovyye-voprosy/dogovory/kak-zaklyuchit-dogovor-s-reg-ru",
+      "note": "Юридические документы на поддоменах и в PDF.",
+      "domain": null,
+      "status": "insufficient_evidence",
+      "ok": false,
+      "seconds": 44.3,
+      "search_calls": 2,
+      "read_urls": 5,
+      "cache_hits": 0,
+      "llm_calls": 2
+    },
+    {
+      "inn": "4401116480",
+      "name": "Совкомбанк",
+      "split": "holdout",
+      "expected_domains": [
+        "sovcombank.ru"
+      ],
+      "gold_source": "https://sovcombank.ru/about/pages/requisites",
+      "note": "ИНН часто упоминается в платёжных реквизитах чужих сайтов.",
+      "domain": null,
+      "status": "insufficient_evidence",
+      "ok": false,
+      "seconds": 193.74,
+      "search_calls": 3,
+      "read_urls": 9,
+      "cache_hits": 0,
+      "llm_calls": 3
+    },
+    {
+      "inn": "7710140679",
+      "name": "ТБанк",
+      "split": "holdout",
+      "expected_domains": [
+        "tbank.ru"
+      ],
+      "gold_source": "https://secrets.tbank.ru/cookie-policy/",
+      "note": "У банка есть собственный каталог контрагентов; карточка не доказывает владельца сайта.",
+      "domain": null,
+      "status": "search_error",
+      "ok": false,
+      "seconds": 1.94,
+      "search_calls": 1,
+      "read_urls": 0,
+      "cache_hits": 0,
+      "llm_calls": 0
+    }
+  ],
+  "summary": {
+    "cases": 4,
+    "correct": 0,
+    "returned_domains": 1,
+    "wrong_domains": 1,
+    "precision_on_returned": 0.0,
+    "positive_recall": 0.0,
+    "median_seconds": 45.334999999999994,
+    "errors": 1
+  }
+}

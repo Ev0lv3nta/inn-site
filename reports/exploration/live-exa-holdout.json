@@ -1,0 +1,152 @@
+{
+  "run_at": "2026-10-09T12:41:06.739968+00:00",
+  "python": "3.13.14",
+  "model_info": {
+    "models": [
+      {
+        "name": "qwen3.5:4b",
+        "model": "qwen3.5:4b",
+        "modified_at": "2026-10-09T15:20:38.11884666+03:00",
+        "size": 3973305013,
+        "digest": "7f3251fa6878a78a606bcb3c074283306e5ad2ea411a7774a9dd98a4bc7f2d13",
+        "details": {
+          "parent_model": "",
+          "format": "safetensors",
+          "family": "",
+          "families": null,
+          "parameter_size": "",
+          "quantization_level": "nvfp4",
+          "runner": "mlx"
+        },
+        "capabilities": [
+          "completion",
+          "vision",
+          "thinking",
+          "tools"
+        ]
+      }
+    ]
+  },
+  "search_provider": "exa",
+  "source_sha256": "61942c0c896dda767bba84037a8b7fc881c9f7e4e7fcf022ab328e4ac03d44af",
+  "rows": [
+    {
+      "inn": "7801451618",
+      "name": "Бегет",
+      "split": "holdout",
+      "expected_domains": [
+        "beget.com"
+      ],
+      "gold_source": "https://beget.com/ru/details",
+      "note": "Хостинг: чужие сайты на инфраструктуре компании не являются её сайтом.",
+      "domain": "beget.com",
+      "status": "found",
+      "ok": true,
+      "seconds": 113.81,
+      "search_calls": 2,
+      "read_urls": 8,
+      "cache_hits": 0,
+      "llm_calls": 2
+    },
+    {
+      "inn": "7810962785",
+      "name": "Селектел",
+      "split": "holdout",
+      "expected_domains": [
+        "selectel.ru"
+      ],
+      "gold_source": "https://selectel.ru/about/details/",
+      "note": "Действующее юрлицо после реорганизации, документы в PDF и HTML.",
+      "domain": "selectel.ru",
+      "status": "found",
+      "ok": true,
+      "seconds": 57.39,
+      "search_calls": 1,
+      "read_urls": 3,
+      "cache_hits": 0,
+      "llm_calls": 1
+    },
+    {
+      "inn": "7810353960",
+      "name": "ТаймВэб",
+      "split": "holdout",
+      "expected_domains": [
+        "timeweb.com"
+      ],
+      "gold_source": "https://timeweb.com/ru/contacts/",
+      "note": "Домен сайта отличается от домена корпоративной почты.",
+      "domain": null,
+      "status": "insufficient_evidence",
+      "ok": false,
+      "seconds": 90.78,
+      "search_calls": 2,
+      "read_urls": 12,
+      "cache_hits": 0,
+      "llm_calls": 2
+    },
+    {
+      "inn": "7733568767",
+      "name": "Регистратор доменных имен РЕГ.РУ",
+      "split": "holdout",
+      "expected_domains": [
+        "reg.ru"
+      ],
+      "gold_source": "https://help.reg.ru/support/pravovyye-voprosy/dogovory/kak-zaklyuchit-dogovor-s-reg-ru",
+      "note": "Юридические документы на поддоменах и в PDF.",
+      "domain": null,
+      "status": "search_error",
+      "ok": false,
+      "seconds": 0.42,
+      "search_calls": 1,
+      "read_urls": 0,
+      "cache_hits": 0,
+      "llm_calls": 0
+    },
+    {
+      "inn": "4401116480",
+      "name": "Совкомбанк",
+      "split": "holdout",
+      "expected_domains": [
+        "sovcombank.ru"
+      ],
+      "gold_source": "https://sovcombank.ru/about/pages/requisites",
+      "note": "ИНН часто упоминается в платёжных реквизитах чужих сайтов.",
+      "domain": null,
+      "status": "ambiguous",
+      "ok": false,
+      "seconds": 72.34,
+      "search_calls": 1,
+      "read_urls": 5,
+      "cache_hits": 0,
+      "llm_calls": 1
+    },
+    {
+      "inn": "7710140679",
+      "name": "ТБанк",
+      "split": "holdout",
+      "expected_domains": [
+        "tbank.ru"
+      ],
+      "gold_source": "https://secrets.tbank.ru/cookie-policy/",
+      "note": "У банка есть собственный каталог контрагентов; карточка не доказывает владельца сайта.",
+      "domain": null,
+      "status": "search_error",
+      "ok": false,
+      "seconds": 47.09,
+      "search_calls": 2,
+      "read_urls": 4,
+      "cache_hits": 0,
+      "llm_calls": 1
+    }
+  ],
+  "summary": {
+    "cases": 6,
+    "correct": 2,
+    "returned_domains": 2,
+    "wrong_domains": 0,
+    "precision_on_returned": 1.0,
+    "positive_recall": 0.3333333333333333,
+    "median_seconds": 64.86500000000001,
+    "errors": 2
+  }
+}

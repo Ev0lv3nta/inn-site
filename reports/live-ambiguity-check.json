@@ -1,0 +1,60 @@
+{
+  "run_at": "2026-10-09T15:15:47.384370+00:00",
+  "python": "3.13.14",
+  "model_info": {
+    "id": "openai/gpt-6-luna",
+    "pricing": {
+      "prompt": "0.0000001",
+      "completion": "0.0000005",
+      "web_search": "0.01",
+      "input_cache_read": "0.00000001",
+      "input_cache_write": "0.000000125",
+      "overrides": [
+        {
+          "min_prompt_tokens": 272000,
+          "prompt": "0.0000002",
+          "completion": "0.00000075",
+          "input_cache_read": "0.00000002",
+          "input_cache_write": "0.00000025"
+        }
+      ]
+    },
+    "context_length": 1050000
+  },
+  "search_provider": "searx",
+  "source_sha256": "3b5c854ee7412f4ff0389b19e768ff9b89847aae21fb7f464b1f218b9ad17ab1",
+  "rows": [
+    {
+      "inn": "7724709637",
+      "name": "Фотоэксперт: несколько брендов",
+      "split": "dev",
+      "expected_domains": [],
+      "gold_source": "https://fotoproekt.ru/requisites",
+      "note": "Неоднозначный основной домен. Фотоэксперт подтверждён на нескольких собственных сайтах; эталон netprint.ru исправлен после аудита первого контрольного прогона.",
+      "additional_gold_sources": [
+        "https://printbook.ru/privacy",
+        "https://partner.netprint.ru/ru/145/2415/"
+      ],
+      "domain": null,
+      "status": "ambiguous",
+      "ok": true,
+      "seconds": 50.24,
+      "search_calls": 2,
+      "read_urls": 7,
+      "cache_hits": 0,
+      "llm_calls": 2,
+      "llm_cost_usd": 0.00069005,
+      "search_failures": 0
+    }
+  ],
+  "summary": {
+    "cases": 1,
+    "correct": 1,
+    "returned_domains": 0,
+    "wrong_domains": 0,
+    "precision_on_returned": null,
+    "positive_recall": null,
+    "median_seconds": 50.24,
+    "errors": 0
+  }
+}

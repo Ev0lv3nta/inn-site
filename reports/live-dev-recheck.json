@@ -1,0 +1,165 @@
+{
+  "run_at": "2026-10-09T14:32:43.222685+00:00",
+  "python": "3.13.14",
+  "model_info": {
+    "id": "openai/gpt-6-luna",
+    "pricing": {
+      "prompt": "0.0000001",
+      "completion": "0.0000005",
+      "web_search": "0.01",
+      "input_cache_read": "0.00000001",
+      "input_cache_write": "0.000000125",
+      "overrides": [
+        {
+          "min_prompt_tokens": 272000,
+          "prompt": "0.0000002",
+          "completion": "0.00000075",
+          "input_cache_read": "0.00000002",
+          "input_cache_write": "0.00000025"
+        }
+      ]
+    },
+    "context_length": 1050000
+  },
+  "search_provider": "searx",
+  "source_sha256": "4db36efbcb399cbcabd5ba9fabc43ed9b8cd83774ed41f53d85ae5d239d8a131",
+  "rows": [
+    {
+      "inn": "9715225506",
+      "name": "Эвотор",
+      "split": "dev",
+      "expected_domains": [
+        "evotor.ru"
+      ],
+      "gold_source": "https://evotor.ru/about-us/",
+      "note": "Реквизиты на странице о компании.",
+      "domain": "evotor.ru",
+      "status": "found",
+      "ok": true,
+      "seconds": 61.81,
+      "search_calls": 2,
+      "read_urls": 12,
+      "cache_hits": 0,
+      "llm_calls": 2
+    },
+    {
+      "inn": "9724061893",
+      "name": "Ветер Спорт",
+      "split": "dev",
+      "expected_domains": [
+        "veter.cc"
+      ],
+      "gold_source": "https://veter.cc/terms-and-conditions/",
+      "note": "Малый бизнес; ИНН и роль продавца есть в оферте, но не на главной.",
+      "domain": "veter.cc",
+      "status": "found",
+      "ok": true,
+      "seconds": 27.15,
+      "search_calls": 2,
+      "read_urls": 8,
+      "cache_hits": 3,
+      "llm_calls": 2
+    },
+    {
+      "inn": "9701034075",
+      "name": "Пироговая / Русские пироги",
+      "split": "dev",
+      "expected_domains": [
+        "xn--80aebcypygk.xn--p1ai",
+        "glavpirog.ru"
+      ],
+      "gold_source": "https://xn--80aebcypygk.xn--p1ai/contacty/",
+      "note": "Кириллический домен; допустим подтверждённый основной домен или его алиас.",
+      "domain": null,
+      "status": "search_error",
+      "ok": false,
+      "seconds": 75.62,
+      "search_calls": 3,
+      "read_urls": 12,
+      "cache_hits": 0,
+      "llm_calls": 3
+    },
+    {
+      "inn": "7801451618",
+      "name": "Бегет",
+      "split": "dev",
+      "expected_domains": [
+        "beget.com"
+      ],
+      "gold_source": "https://beget.com/ru/details",
+      "note": "Хостинг: чужие сайты на инфраструктуре компании не являются её сайтом.",
+      "domain": "beget.com",
+      "status": "found",
+      "ok": true,
+      "seconds": 20.21,
+      "search_calls": 1,
+      "read_urls": 7,
+      "cache_hits": 0,
+      "llm_calls": 1
+    },
+    {
+      "inn": "7733568767",
+      "name": "Регистратор доменных имен РЕГ.РУ",
+      "split": "dev",
+      "expected_domains": [
+        "reg.ru"
+      ],
+      "gold_source": "https://help.reg.ru/support/pravovyye-voprosy/dogovory/kak-zaklyuchit-dogovor-s-reg-ru",
+      "note": "Юридические документы на поддоменах и в PDF.",
+      "domain": "reg.ru",
+      "status": "found",
+      "ok": true,
+      "seconds": 40.58,
+      "search_calls": 1,
+      "read_urls": 3,
+      "cache_hits": 0,
+      "llm_calls": 1
+    },
+    {
+      "inn": "4401116480",
+      "name": "Совкомбанк",
+      "split": "dev",
+      "expected_domains": [
+        "sovcombank.ru"
+      ],
+      "gold_source": "https://sovcombank.ru/about/pages/requisites",
+      "note": "ИНН часто упоминается в платёжных реквизитах чужих сайтов.",
+      "domain": null,
+      "status": "insufficient_evidence",
+      "ok": false,
+      "seconds": 37.67,
+      "search_calls": 2,
+      "read_urls": 6,
+      "cache_hits": 0,
+      "llm_calls": 2
+    },
+    {
+      "inn": "7710140679",
+      "name": "ТБанк",
+      "split": "dev",
+      "expected_domains": [
+        "tbank.ru"
+      ],
+      "gold_source": "https://secrets.tbank.ru/cookie-policy/",
+      "note": "У банка есть собственный каталог контрагентов; карточка не доказывает владельца сайта.",
+      "domain": null,
+      "status": "insufficient_evidence",
+      "ok": false,
+      "seconds": 120.0,
+      "search_calls": 2,
+      "read_urls": 12,
+      "cache_hits": 0,
+      "llm_calls": 2
+    }
+  ],
+  "summary": {
+    "cases": 7,
+    "correct": 4,
+    "returned_domains": 4,
+    "wrong_domains": 0,
+    "precision_on_returned": 1.0,
+    "positive_recall": 0.5714285714285714,
+    "median_seconds": 40.58,
+    "errors": 1
+  }
+}
